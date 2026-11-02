@@ -21,7 +21,7 @@ use std::os::unix::fs::FileExt;
 #[cfg(windows)]
 use std::os::windows::fs::FileExt;
 
-#[cfg(not(windows))]
+#[cfg(any(not(windows), test))]
 use super::range_lock::QueryLock;
 use super::range_lock::{acquired, check_range, retrying};
 

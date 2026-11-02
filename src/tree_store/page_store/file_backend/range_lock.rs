@@ -1,4 +1,6 @@
-use std::fs::{File, TryLockError};
+#[cfg(any(not(windows), test))]
+use std::fs::File;
+use std::fs::TryLockError;
 use std::io;
 use std::ops::{Bound, RangeBounds};
 #[cfg(any(target_os = "linux", target_vendor = "apple"))]
@@ -68,10 +70,10 @@ pub(crate) fn retrying<T>(mut op: impl FnMut() -> io::Result<T>) -> io::Result<T
 
 /// Byte-range locks themselves are [`File::lock_range`] and its relatives. std has no query for
 /// a conflicting lock, because Windows has none, so this keeps one.
+#[cfg(any(not(windows), test))]
 pub(crate) trait QueryLock {
     /// Whether an exclusive lock over the range would conflict with one already held.
     /// [`File::lock`] is included wherever it would in fact block a range lock
-    #[cfg(any(not(windows), test))]
     fn query_lock(&self, _range: impl RangeBounds<u64>) -> io::Result<bool> {
         Err(io::Error::new(
             io::ErrorKind::Unsupported,
@@ -85,9 +87,8 @@ impl QueryLock for File {}
 
 // Windows has no query. FileBackend emulates one under its query mutex; test observers, which
 // bypass that mutex to inspect a backend's locks, probe directly.
-#[cfg(windows)]
+#[cfg(all(windows, test))]
 impl QueryLock for File {
-    #[cfg(test)]
     fn query_lock(&self, range: impl RangeBounds<u64>) -> io::Result<bool> {
         let range = (range.start_bound().cloned(), range.end_bound().cloned());
         if acquired(self.try_lock_range(range))? {
