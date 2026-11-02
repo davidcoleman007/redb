@@ -1,4 +1,6 @@
 #![cfg_attr(redb_no_std, no_std)]
+// Byte-range file locks from std (prototype of `File::lock_range`; requires a toolchain with it)
+#![cfg_attr(not(redb_no_std), feature(file_lock_range))]
 #![deny(clippy::all, clippy::pedantic, clippy::disallowed_methods)]
 #![allow(
     clippy::if_not_else,

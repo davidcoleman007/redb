@@ -2901,7 +2901,7 @@ mod test {
 mod writer_byte_test {
     use super::{ConcurrencyMode, Database, WRITER_BYTE, byte_range};
     use crate::TableDefinition;
-    use crate::tree_store::file_backend::range_lock::RangeLock;
+    use crate::tree_store::file_backend::range_lock::acquired;
     use crate::tree_store::page_store::page_manager::HEADER_LOCK;
     use std::fs::{File, OpenOptions};
     use std::path::Path;
@@ -3276,7 +3276,7 @@ mod writer_byte_test {
         let tmpfile = crate::create_tempfile();
         let probe = probe(tmpfile.path());
         // Stands in for a create holding the header lock across its initialization
-        assert!(probe.try_lock_range(HEADER_LOCK).unwrap());
+        assert!(acquired(probe.try_lock_range(HEADER_LOCK)).unwrap());
 
         let path = tmpfile.path().to_path_buf();
         let (opened, opens) = mpsc::channel();
@@ -3328,7 +3328,7 @@ mod writer_byte_test {
         write.commit().unwrap();
 
         let probe = probe(tmpfile.path());
-        assert!(probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
         let path = tmpfile.path().to_path_buf();
         let (repairing, repairs) = mpsc::channel();
         let opening = thread::spawn(move || {
@@ -3433,13 +3433,13 @@ mod writer_byte_test {
 
         let write = db.begin_write().unwrap();
         assert!(
-            !probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            !acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "the byte was free while a write transaction was open"
         );
         write.commit().unwrap();
 
         assert!(
-            probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "the byte was still held after the transaction ended"
         );
         probe.unlock_range(byte_range(WRITER_BYTE)).unwrap();
@@ -3455,18 +3455,18 @@ mod writer_byte_test {
         let probe = probe(tmpfile.path());
 
         assert!(
-            !probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            !acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "the open did not take the writer byte"
         );
         commit_one(&db);
         assert!(
-            !probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            !acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "a write transaction punctured the open's hold on the writer byte"
         );
 
         drop(db);
         assert!(
-            probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "the byte was still held after the database closed"
         );
         probe.unlock_range(byte_range(WRITER_BYTE)).unwrap();
@@ -3483,13 +3483,13 @@ mod writer_byte_test {
         let write = db.begin_write().unwrap();
         drop(db);
         assert!(
-            !probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            !acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "dropping the database released the byte from under a live transaction"
         );
 
         write.commit().unwrap();
         assert!(
-            probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap(),
+            acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap(),
             "the byte was still held after the deferred close"
         );
         probe.unlock_range(byte_range(WRITER_BYTE)).unwrap();
@@ -3501,7 +3501,7 @@ mod writer_byte_test {
 mod consistent_byte_test {
     use super::{CONSISTENT_BYTE, ConcurrencyMode, Database, byte_range};
     use crate::backends::FileBackend;
-    use crate::tree_store::file_backend::range_lock::RangeLock;
+    use crate::tree_store::file_backend::range_lock::acquired;
     use crate::{BackendError, StorageBackend, TableDefinition};
     use std::fs::{File, OpenOptions};
     use std::ops::Bound;
@@ -3529,7 +3529,7 @@ mod consistent_byte_test {
 
     /// True when some writer asserts the database is consistent
     fn held(probe: &File) -> bool {
-        let taken = probe.try_lock_range(byte_range(CONSISTENT_BYTE)).unwrap();
+        let taken = acquired(probe.try_lock_range(byte_range(CONSISTENT_BYTE))).unwrap();
         if taken {
             probe.unlock_range(byte_range(CONSISTENT_BYTE)).unwrap();
         }
@@ -4148,7 +4148,7 @@ mod unflushed_primary_test {
 #[cfg(all(test, any(target_os = "linux", target_vendor = "apple", windows)))]
 mod active_transaction_test {
     use super::{ConcurrencyMode, Database, ReadableDatabase, TXN_BASE, WRITER_BYTE, byte_range};
-    use crate::tree_store::file_backend::range_lock::RangeLock;
+    use crate::tree_store::file_backend::range_lock::acquired;
     use crate::tree_store::page_store::page_manager::HEADER_LOCK;
     use crate::{Durability, SavepointError, SetDurabilityError, TableDefinition};
     use std::fs::{File, OpenOptions};
@@ -4185,7 +4185,7 @@ mod active_transaction_test {
     /// one. Reports the whole-file lock a exclusive-writer open holds as well, which is what
     /// `an_exclusive_writer_read_does_not_puncture_the_whole_file_lock` relies on
     fn is_held(probe: &File, id: u64) -> bool {
-        let free = probe.try_lock_range(byte_range(TXN_BASE + id)).unwrap();
+        let free = acquired(probe.try_lock_range(byte_range(TXN_BASE + id))).unwrap();
         if free {
             probe.unlock_range(byte_range(TXN_BASE + id)).unwrap();
         }
@@ -4638,12 +4638,12 @@ mod active_transaction_test {
         let txn = db.begin_write().unwrap();
         assert!(db.transaction_tracker.holds_writer_byte());
         assert!(db.transaction_tracker.write_transaction_live());
-        assert!(!probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(!acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
 
         txn.abort().unwrap();
         assert!(!db.transaction_tracker.holds_writer_byte());
         assert!(!db.transaction_tracker.write_transaction_live());
-        assert!(probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
         probe.unlock_range(byte_range(WRITER_BYTE)).unwrap();
     }
 
@@ -4954,10 +4954,10 @@ mod active_transaction_test {
         let txn = db.begin_write_with(None, Some(&header_lock)).unwrap();
         txn.open_table(TABLE).unwrap().insert(1, 1).unwrap();
         txn.commit_with(Some(&header_lock)).unwrap();
-        assert!(!probe.try_lock_shared_range(HEADER_LOCK).unwrap());
+        assert!(!acquired(probe.try_lock_shared_range(HEADER_LOCK)).unwrap());
 
         drop(header_lock);
-        assert!(probe.try_lock_shared_range(HEADER_LOCK).unwrap());
+        assert!(acquired(probe.try_lock_shared_range(HEADER_LOCK)).unwrap());
         probe.unlock_range(HEADER_LOCK).unwrap();
     }
 
@@ -4971,10 +4971,10 @@ mod active_transaction_test {
         let writer_lock = db.mem.lock_writer().unwrap();
         let txn = db.begin_write_with(Some(&writer_lock), None).unwrap();
         txn.abort().unwrap();
-        assert!(!probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(!acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
 
         drop(writer_lock);
-        assert!(probe.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(acquired(probe.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
         probe.unlock_range(byte_range(WRITER_BYTE)).unwrap();
     }
 }

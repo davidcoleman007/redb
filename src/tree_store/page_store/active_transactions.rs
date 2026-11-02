@@ -44,7 +44,7 @@ fn bytes(low: u64, high: u64) -> Range<u64> {
 mod test {
     use super::lowest_held;
     use crate::db::{TXN_BASE, byte_range};
-    use crate::tree_store::file_backend::range_lock::RangeLock;
+    use crate::tree_store::file_backend::range_lock::{QueryLock, acquired};
     use alloc::vec::Vec;
     use std::fs::{File, OpenOptions};
     use std::path::Path;
@@ -59,10 +59,7 @@ mod test {
 
     // Stands in for a read transaction's lock: the scan only cares that the byte is held
     fn pin(file: &File, id: u64) {
-        assert!(
-            file.try_lock_shared_range(byte_range(TXN_BASE + id))
-                .unwrap()
-        );
+        assert!(acquired(file.try_lock_shared_range(byte_range(TXN_BASE + id))).unwrap());
     }
 
     fn unpin(file: &File, id: u64) {
@@ -115,10 +112,7 @@ mod test {
             for _ in 0..=next() % 5 {
                 let id = next() % span;
                 let holder = reopen(tmpfile.path());
-                if holder
-                    .try_lock_shared_range(byte_range(TXN_BASE + id))
-                    .unwrap()
-                {
+                if acquired(holder.try_lock_shared_range(byte_range(TXN_BASE + id))).unwrap() {
                     holders.push((holder, id));
                 }
             }

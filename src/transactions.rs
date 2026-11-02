@@ -2970,7 +2970,7 @@ mod test {
     fn failed_multi_writer_open_releases_locks_without_committing() {
         use super::{SAVEPOINT_TABLE, SavepointId, SerializedSavepoint};
         use crate::db::FULL_RANGE;
-        use crate::tree_store::file_backend::range_lock::RangeLock;
+        use crate::tree_store::file_backend::range_lock::acquired;
         use crate::tree_store::{PAGE_SIZE, TransactionalMemory};
         use crate::{ConcurrencyMode, DatabaseError, backends::FileBackend};
         use std::sync::mpsc;
@@ -3026,7 +3026,7 @@ mod test {
         // A caller's duplicate keeps the file description alive, so dropping the backend's
         // File alone would leave its locks held on platforms with open-file-description locks.
         let observer = tmpfile.reopen().unwrap();
-        assert!(observer.try_lock_range(FULL_RANGE).unwrap());
+        assert!(acquired(observer.try_lock_range(FULL_RANGE)).unwrap());
         observer.unlock_range(FULL_RANGE).unwrap();
         drop(kept_by_caller);
 

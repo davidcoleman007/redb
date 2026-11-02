@@ -21,7 +21,9 @@ use std::os::unix::fs::FileExt;
 #[cfg(windows)]
 use std::os::windows::fs::FileExt;
 
-use super::range_lock::RangeLock;
+#[cfg(not(windows))]
+use super::range_lock::QueryLock;
+use super::range_lock::{acquired, check_range, retrying};
 
 fn is_whole_storage(range: (Bound<u64>, Bound<u64>)) -> bool {
     matches!(range.0, Bound::Unbounded | Bound::Included(0)) && range.1 == Bound::Unbounded
@@ -152,15 +154,18 @@ impl FileBackend {
     }
 
     fn try_lock_native(&self, range: (Bound<u64>, Bound<u64>), shared: bool) -> io::Result<bool> {
-        let acquired = if shared {
-            self.file.try_lock_shared_range(range)?
-        } else {
-            self.file.try_lock_range(range)?
-        };
-        if acquired {
+        check_range(range)?;
+        let taken = retrying(|| {
+            acquired(if shared {
+                self.file.try_lock_shared_range(range)
+            } else {
+                self.file.try_lock_range(range)
+            })
+        })?;
+        if taken {
             self.locked_ranges.lock().unwrap().insert(range);
         }
-        Ok(acquired)
+        Ok(taken)
     }
 
     #[cfg(any(windows, all(test, any(target_os = "linux", target_vendor = "apple"))))]
@@ -206,18 +211,22 @@ impl FileBackend {
     fn unlock_native_range(&self, range: (Bound<u64>, Bound<u64>)) -> io::Result<()> {
         // Update the record before another query can record its acquisition of the same byte.
         // Retain failed unlocks for close() to retry.
+        check_range(range)?;
         let mut locked_ranges = self.locked_ranges.lock().unwrap();
-        self.file.unlock_range(range)?;
+        retrying(|| self.file.unlock_range(range))?;
         locked_ranges.remove(&range);
         Ok(())
     }
 
     fn lock(&self, range: (Bound<u64>, Bound<u64>), shared: bool) -> io::Result<()> {
-        let result = if shared {
-            self.file.lock_shared_range(range)
-        } else {
-            self.file.lock_range(range)
-        };
+        check_range(range)?;
+        let result = retrying(|| {
+            if shared {
+                self.file.lock_shared_range(range)
+            } else {
+                self.file.lock_range(range)
+            }
+        });
         match result {
             Ok(()) => {
                 self.locked_ranges.lock().unwrap().insert(range);
@@ -240,7 +249,7 @@ impl FileBackend {
         // A lock left behind outlives this backend wherever the description is shared.
         let mut result = Ok(());
         for range in self.locked_ranges.lock().unwrap().drain() {
-            result = result.and(self.file.unlock_range(range));
+            result = result.and(retrying(|| self.file.unlock_range(range)));
         }
         result.and(self.unlock_whole_file())
     }
@@ -476,7 +485,7 @@ fn write_all_at(file: &File, mut buf: &[u8], mut offset: u64) -> io::Result<()> 
 
 #[cfg(all(test, any(target_os = "linux", target_vendor = "apple", windows)))]
 mod range_lock_tests {
-    use super::{Bound, FileBackend, QUERY_BYTE, RangeLock, StorageBackend};
+    use super::{Bound, FileBackend, QUERY_BYTE, QueryLock, StorageBackend, acquired};
     use crate::db::{BACKEND_LOCK_RANGE, FULL_RANGE, byte_range};
     #[cfg(not(target_os = "linux"))]
     use std::fs::TryLockError;
@@ -551,9 +560,9 @@ mod range_lock_tests {
     fn byte_is_free(file: &File, offset: u64, exclusive: bool) -> bool {
         let byte = offset..offset + 1;
         let acquired = if exclusive {
-            file.try_lock_range(byte.clone()).unwrap()
+            acquired(file.try_lock_range(byte.clone())).unwrap()
         } else {
-            file.try_lock_shared_range(byte.clone()).unwrap()
+            acquired(file.try_lock_shared_range(byte.clone())).unwrap()
         };
         if acquired {
             file.unlock_range(byte).unwrap();
@@ -715,7 +724,7 @@ mod range_lock_tests {
                 matches!(operation, QueryMutexOperation::Query)
             );
             assert!(byte_is_free(&holder, QUERY_BYTE, true));
-            assert!(!backend.file.try_lock_range(range).unwrap());
+            assert!(!acquired(backend.file.try_lock_range(range)).unwrap());
             for invalid in [
                 (Bound::Included(200), Bound::Excluded(200)),
                 byte_range(BACKEND_LOCK_RANGE.start),
@@ -838,7 +847,7 @@ mod range_lock_tests {
     fn a_held_protocol_byte_reads_as_already_open() {
         let tmpfile = crate::create_tempfile();
         let holder = reopen(tmpfile.path());
-        assert!(holder.try_lock_range(BASE..=BASE).unwrap());
+        assert!(acquired(holder.try_lock_range(BASE..=BASE)).unwrap());
 
         // A held byte anywhere in the range stands in for a multi-process handle having
         // the database open
@@ -863,7 +872,7 @@ mod range_lock_tests {
         let tmpfile = crate::create_tempfile();
         let holder = reopen(tmpfile.path());
         // In the second piece only, so that the first is taken before the conflict
-        assert!(holder.try_lock_range(BASE..=BASE).unwrap());
+        assert!(acquired(holder.try_lock_range(BASE..=BASE)).unwrap());
 
         let file = reopen(tmpfile.path());
         let kept_by_the_caller = file.try_clone().unwrap();
@@ -889,7 +898,7 @@ mod range_lock_tests {
         assert!(!asking.query_lock(byte.clone()).unwrap());
 
         let holder = reopen(tmpfile.path());
-        assert!(holder.try_lock_range(byte.clone()).unwrap());
+        assert!(acquired(holder.try_lock_range(byte.clone())).unwrap());
         assert!(asking.query_lock(byte.clone()).unwrap());
 
         holder.unlock_range(byte.clone()).unwrap();
@@ -910,16 +919,16 @@ mod range_lock_tests {
             let low_offset = offset & u64::from(u32::MAX);
             let low_byte = low_offset..low_offset + 1;
             for exclusive in [false, true] {
-                let acquired = if exclusive {
-                    holder.try_lock_range(byte.clone())
+                let held = if exclusive {
+                    acquired(holder.try_lock_range(byte.clone()))
                 } else {
-                    holder.try_lock_shared_range(byte.clone())
+                    acquired(holder.try_lock_shared_range(byte.clone()))
                 };
-                assert!(acquired.unwrap());
+                assert!(held.unwrap());
                 assert!(observer.query_lock(byte.clone()).unwrap());
-                assert!(!observer.try_lock_range(byte.clone()).unwrap());
+                assert!(!acquired(observer.try_lock_range(byte.clone())).unwrap());
                 assert!(!observer.query_lock(low_byte.clone()).unwrap());
-                assert!(observer.try_lock_range(low_byte.clone()).unwrap());
+                assert!(acquired(observer.try_lock_range(low_byte.clone())).unwrap());
                 observer.unlock_range(low_byte.clone()).unwrap();
 
                 holder.unlock_range(byte.clone()).unwrap();
@@ -936,10 +945,10 @@ mod range_lock_tests {
 
         for range in [0..BASE, BASE..(1 << 63) - 1] {
             let last_byte = range.end - 1..range.end;
-            assert!(holder.try_lock_shared_range(range.clone()).unwrap());
+            assert!(acquired(holder.try_lock_shared_range(range.clone())).unwrap());
             assert!(observer.query_lock(last_byte.clone()).unwrap());
-            assert!(!observer.try_lock_range(last_byte.clone()).unwrap());
-            assert!(observer.try_lock_shared_range(last_byte.clone()).unwrap());
+            assert!(!acquired(observer.try_lock_range(last_byte.clone())).unwrap());
+            assert!(acquired(observer.try_lock_shared_range(last_byte.clone())).unwrap());
             observer.unlock_range(last_byte.clone()).unwrap();
             assert!(!observer.query_lock(range.end..=range.end).unwrap());
 
@@ -957,12 +966,12 @@ mod range_lock_tests {
 
         holder.lock_shared_range(byte.clone()).unwrap();
         assert!(observer.query_lock(byte.clone()).unwrap());
-        assert!(!observer.try_lock_range(byte.clone()).unwrap());
+        assert!(!acquired(observer.try_lock_range(byte.clone())).unwrap());
         holder.unlock_range(byte.clone()).unwrap();
 
         holder.lock_range(byte.clone()).unwrap();
         assert!(observer.query_lock(byte.clone()).unwrap());
-        assert!(!observer.try_lock_shared_range(byte.clone()).unwrap());
+        assert!(!acquired(observer.try_lock_shared_range(byte.clone())).unwrap());
         holder.unlock_range(byte.clone()).unwrap();
         assert!(!observer.query_lock(byte).unwrap());
     }

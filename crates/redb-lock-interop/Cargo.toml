@@ -1,0 +1,17 @@
+[package]
+name = "redb-lock-interop"
+description = "Checks that std's byte-range locks interoperate with redb's own, across processes"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Not a member of the main workspace: it needs a toolchain with `File::lock_range`, and builds a
+# second copy of redb
+[workspace]
+
+[dependencies]
+# Byte-range locks through std's `File::lock_range` and its relatives
+redb_std = { package = "redb", path = "../.." }
+# Byte-range locks through redb's own fcntl (OFD) and LockFileEx calls
+redb_own = { package = "redb", git = "https://github.com/cberner/redb", rev = "e8ade241271017bdc9131d6d72f38fe31c1bf431" }
+tempfile = "3.5.0"

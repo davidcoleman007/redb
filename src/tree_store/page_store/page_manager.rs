@@ -3042,7 +3042,7 @@ mod lock_protocol_test {
     use crate::db::ConcurrencyMode;
     use crate::tree_store::page_store::cached_file::PagedCachedFile;
     use crate::tree_store::page_store::file_backend::FileBackend;
-    use crate::tree_store::page_store::file_backend::range_lock::RangeLock;
+    use crate::tree_store::page_store::file_backend::range_lock::{QueryLock, acquired};
     use std::fs::{File, OpenOptions};
     use std::path::Path;
 
@@ -3091,11 +3091,7 @@ mod lock_protocol_test {
 
         let tmpfile = crate::create_tempfile();
         let cohort = reopen(tmpfile.path());
-        assert!(
-            cohort
-                .try_lock_shared_range(byte_range(SHARED_WRITER_BYTE))
-                .unwrap()
-        );
+        assert!(acquired(cohort.try_lock_shared_range(byte_range(SHARED_WRITER_BYTE))).unwrap());
 
         assert!(refused(exclusive_writer(tmpfile.path(), true)));
     }
@@ -3122,10 +3118,10 @@ mod lock_protocol_test {
                 observer.query_lock(byte_range(SHARED_WRITER_BYTE)).unwrap(),
                 !read_only
             );
-            assert!(observer.try_lock_range(BACKEND_LOCK_RANGE).unwrap());
+            assert!(acquired(observer.try_lock_range(BACKEND_LOCK_RANGE)).unwrap());
             observer.unlock_range(BACKEND_LOCK_RANGE).unwrap();
             storage.close().unwrap();
-            assert!(observer.try_lock_range(..).unwrap());
+            assert!(acquired(observer.try_lock_range(..)).unwrap());
             observer.unlock_range(..).unwrap();
         }
     }
@@ -3138,11 +3134,7 @@ mod lock_protocol_test {
         let holder = reopen(tmpfile.path());
         // The tail is acquired before the conflict on the prefix.
         for read_only in [false, true] {
-            assert!(
-                holder
-                    .try_lock_range(byte_range(SHARED_WRITER_BYTE - 1))
-                    .unwrap()
-            );
+            assert!(acquired(holder.try_lock_range(byte_range(SHARED_WRITER_BYTE - 1))).unwrap());
             let file = reopen(tmpfile.path());
             let retained = file.try_clone().unwrap();
             assert!(refused(open_file(
@@ -3150,11 +3142,7 @@ mod lock_protocol_test {
                 read_only,
                 ConcurrencyMode::ExclusiveWriter
             )));
-            assert!(
-                holder
-                    .try_lock_range(byte_range(SHARED_WRITER_BYTE + 1))
-                    .unwrap()
-            );
+            assert!(acquired(holder.try_lock_range(byte_range(SHARED_WRITER_BYTE + 1))).unwrap());
             holder
                 .unlock_range(byte_range(SHARED_WRITER_BYTE + 1))
                 .unwrap();
@@ -3319,7 +3307,7 @@ mod lock_protocol_test {
 
         let tmpfile = crate::create_tempfile();
         let holder = reopen(tmpfile.path());
-        assert!(holder.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+        assert!(acquired(holder.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
 
         // The shared writer byte is taken before the conflict on the writer byte
         let file = reopen(tmpfile.path());
@@ -3335,7 +3323,7 @@ mod lock_protocol_test {
             byte_range(SHARED_WRITER_BYTE),
             byte_range(PROTOCOL_GENERATION_BYTE),
         ] {
-            assert!(observer.try_lock_range(byte).unwrap());
+            assert!(acquired(observer.try_lock_range(byte)).unwrap());
             observer.unlock_range(byte).unwrap();
         }
         drop(kept_by_the_caller);
@@ -3378,7 +3366,7 @@ mod lock_protocol_test {
                 "{mode:?} read_only={read_only}"
             );
             // The byte is held shared, so a peer of the same generation can hold it too.
-            assert!(observer.try_lock_shared_range(own).unwrap());
+            assert!(acquired(observer.try_lock_shared_range(own)).unwrap());
             observer.unlock_range(own).unwrap();
             for range in others.iter().filter(|range| !range.is_empty()) {
                 assert!(!observer.query_lock(range.clone()).unwrap());
@@ -3388,7 +3376,7 @@ mod lock_protocol_test {
         }
 
         let writer = exclusive_writer(tmpfile.path(), false).unwrap();
-        assert!(!observer.try_lock_shared_range(own).unwrap());
+        assert!(!acquired(observer.try_lock_shared_range(own)).unwrap());
         for range in others.iter().filter(|range| !range.is_empty()) {
             assert!(observer.query_lock(range.clone()).unwrap());
         }
@@ -3415,11 +3403,11 @@ mod lock_protocol_test {
             PROTOCOL_GENERATION_BYTES.end - 1,
         ] {
             for writing in [false, true] {
-                assert!(peer.try_lock_shared_range(byte_range(other)).unwrap());
+                assert!(acquired(peer.try_lock_shared_range(byte_range(other))).unwrap());
                 if writing {
                     // The peer is a single writer, which also holds these two bytes exclusively.
-                    assert!(peer.try_lock_range(byte_range(SHARED_WRITER_BYTE)).unwrap());
-                    assert!(peer.try_lock_range(byte_range(WRITER_BYTE)).unwrap());
+                    assert!(acquired(peer.try_lock_range(byte_range(SHARED_WRITER_BYTE))).unwrap());
+                    assert!(acquired(peer.try_lock_range(byte_range(WRITER_BYTE))).unwrap());
                 }
                 for mode in [ConcurrencyMode::SingleWriter, ConcurrencyMode::MultiWriter] {
                     for read_only in [false, true] {
@@ -3435,7 +3423,7 @@ mod lock_protocol_test {
                 );
                 assert!(refused(exclusive_writer(tmpfile.path(), false)));
                 // A refused open releases its own generation byte.
-                assert!(peer.try_lock_range(own).unwrap());
+                assert!(acquired(peer.try_lock_range(own)).unwrap());
                 peer.unlock_range(own).unwrap();
                 peer.unlock_range(byte_range(other)).unwrap();
                 if writing {
@@ -3446,7 +3434,7 @@ mod lock_protocol_test {
         }
 
         // A peer of the same generation is not a mismatch.
-        assert!(peer.try_lock_shared_range(own).unwrap());
+        assert!(acquired(peer.try_lock_shared_range(own)).unwrap());
         for mode in [ConcurrencyMode::SingleWriter, ConcurrencyMode::MultiWriter] {
             for read_only in [false, true] {
                 open(tmpfile.path(), read_only, mode)
