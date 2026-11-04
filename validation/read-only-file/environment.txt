@@ -1,0 +1,10 @@
+2026-11-04T00:55:34+00:00
+d78f54e0cea93e60cb70ccdde4b065871d40c474
+8d0d85cd84a724e10ed718e681e605e51a079a31
+Linux 6.12.113+deb13-arm64 aarch64
+rustc 1.90.0 (1159e78c4 2025-09-14)
+cargo 1.90.0 (840b83a10 2025-07-30)
+just 1.36.0
+cargo-deny 0.20.2
+podman version 3.4.4
+Rootless: true

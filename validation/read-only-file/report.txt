@@ -1,0 +1,105 @@
+REDB READ-ONLY FILE: EXACT-COMMIT VALIDATION RECEIPT
+
+Result: FAILED. Required sandbox acceptance remains pending.
+
+Repository: https://github.com/davidcoleman007/redb
+Feature branch: feat/read-only-file
+Tested commit: d78f54e0cea93e60cb70ccdde4b065871d40c474
+Tested tree: 8d0d85cd84a724e10ed718e681e605e51a079a31
+Upstream base: 8fbdfcca811196be48b0d225578823e91670c316
+Evidence branch requested: validation/read-only-file-d78f54e
+
+Attempt 01
+
+Started: 2026-11-04T00:55:34+00:00
+Ended:   2026-11-04T00:55:40+00:00
+Command: just test
+Actual exit status: 125 (captured from the command, not tee).
+
+Executed stages:
+- cargo deny --workspace --all-features check licenses advisories: passed;
+  output was "advisories ok, licenses ok".
+- cargo fmt --all -- --check: passed.
+- ./scripts/podman-sandbox.sh 'just _checks_no_sandbox': failed before the
+  image build, because installed Podman 3.4.4 rejected --pull=missing:
+
+  Error: invalid argument "missing" for "--pull" flag:
+  strconv.ParseBool: parsing "missing": invalid syntax
+
+Clippy: NOT RUN.
+Rust test suites: NOT RUN; zero tests executed by this attempt.
+no_std compilation and additional CI/platform cells: NOT RUN here.
+User-reported local runs are not counted as sandbox results.
+
+Source binding
+
+A fresh public-fork clone was clean before execution. The commit/tree and all
+three supplied hashes matched before the command. After execution, the feature
+SHA, clean tracked/untracked status, and these hashes were unchanged:
+
+7bdcb56740554117f2c81f3696a628fa50c546dc1d73f0cae1e8e7f2edb8e0bf  src/db.rs
+e0f414544ef37ad98f7dda7a57240202671d949a86e5ed029a90965db735bdc9  tests/basic_tests.rs
+cb9679d70a17be721478667f4586989bd33dc0e38b6d47f9080a71e87d254461  CHANGELOG.md
+
+Tested sandbox image: NOT PRODUCED.
+Image-to-checkout source comparison: NOT RUN because the gate failed before
+building the image. No image/source equivalence or container-test pass is claimed.
+The empty checkout-source-comparison.txt records a successful before/after
+checkout comparison, not an image comparison.
+
+Environment and isolation
+
+Host: Linux 6.12.113+deb13-arm64 aarch64.
+rustc: 1.90.0 (1159e78c4 2025-09-14).
+cargo: 1.90.0 (840b83a10 2025-07-30).
+just: 1.36.0.
+cargo-deny: 0.20.2.
+Podman: 3.4.4, installed from the host distribution.
+podman info reported Rootless: true under an unprivileged validation account.
+The just and cargo-deny downloads matched their published checksums.
+
+The committed justfile, sandbox script and Containerfile were read and left
+unchanged. No network restriction, read-only setting, capability drop,
+no-new-privileges setting, memory/PID bound, or other security control was
+disabled. The requested container resource limits were never exercised because
+the image build did not start. Rootless initialization alone is not proof of
+successful container execution.
+
+An earlier runtime smoke test, separate from this source-bound gate, also failed.
+It pulled the public Rust 1.90 base image, then attempted:
+
+podman run --rm --network=none --read-only --cap-drop=all \
+  --security-opt=no-new-privileges --pids-limit=2048 --memory=8g \
+  --userns=keep-id --user=1000:1000 --http-proxy=false \
+  docker.io/library/rust:1.90-bookworm rustc --version
+
+That command exited 125 with:
+Error: could not find cgroup mount in "/proc/self/cgroup"
+
+Its transcript is retained as container-runtime-probe.log. It did not run the
+feature source and is not an additional source-bound test attempt. The host
+reported cgroup v2 with cgroupfs; no cgroup hierarchy, delegation, or controller
+settings were changed to bypass the failure. A shared-memory directory permission
+prerequisite was repaired with explicit owner approval before these attempts.
+
+Required next step
+
+Repeat the unchanged gate on a functioning rootless runner with a Podman version
+supporting the committed --pull=missing option and working cgroup/resource-limit
+handling. Preserve this failed attempt alongside any replacement. Do not edit the
+feature or weaken the sandbox script merely to obtain a pass.
+
+Disclosure and publication
+
+These receipt files contain the reviewed gate transcript and a separate runtime
+probe. They omit credentials, account configuration, private project references,
+private host paths, and environment dumps. No redaction of the included gate or
+probe transcripts was necessary; neither contains those details. Private runner
+helpers and unrelated logs are not included.
+
+No PR was opened, no merge was performed, no feature commit was amended, and
+feat/read-only-file was not changed or pushed by the validation runner.
+Personal-account publication was unavailable in the runner, so the evidence is
+returned privately for the local agent to publish on the separate evidence
+branch. A prepared local evidence commit, if supplied with this receipt, is not
+a published branch and does not constitute passing sandbox acceptance.
