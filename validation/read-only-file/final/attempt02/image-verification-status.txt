@@ -1,0 +1,1 @@
+NOT RUN: required gate failed; no image/source equivalence claimed.

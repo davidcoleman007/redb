@@ -1,0 +1,5 @@
+Proxy address family -4: HTTP 200
+exit=0
+Proxy address family -6: curl: (56) Recv failure: Connection reset by peer
+HTTP 000
+exit=56

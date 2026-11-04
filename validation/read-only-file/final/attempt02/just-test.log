@@ -1,0 +1,13 @@
+cargo deny --workspace --all-features check licenses advisories
+advisories ok, licenses ok
+cargo fmt --all -- --check
+./scripts/podman-sandbox.sh 'just _checks_no_sandbox'
+STEP 1/9: FROM docker.io/library/rust:1.90-bookworm
+STEP 2/9: ARG RUST_VERSION
+--> eb5c9a3928d5
+STEP 3/9: ARG DEBIAN_FRONTEND=noninteractive
+--> 00913a617865
+STEP 4/9: RUN apt-get update     && apt-get install --no-install-recommends --yes libclang-dev     && rm -rf /var/lib/apt/lists/*
+error running container: did not get container start message from parent: EOF
+Error: building at STEP "RUN apt-get update     && apt-get install --no-install-recommends --yes libclang-dev     && rm -rf /var/lib/apt/lists/*": setup network: /usr/bin/slirp4netns failed: "open(\"/dev/net/tun\"): No such file or directory\nWARNING: Support for seccomp is experimental\nWARNING: Support for IPv6 is experimental\nchild failed(1)\nWARNING: Support for seccomp is experimental\nWARNING: Support for IPv6 is experimental\n"
+error: Recipe `_checks` failed on line 18 with exit code 125

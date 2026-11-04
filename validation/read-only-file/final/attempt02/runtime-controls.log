@@ -1,0 +1,8 @@
+time="2026-11-04T01:12:23Z" level=warning msg="\"/\" is not a shared mount, this could cause issues or missing mounts with rootless containers"
+memory.max=8589934592
+pids.max=2048
+CapEff:	0000000000000000
+NoNewPrivs:	1
+Seccomp:	2
+root_mount=ro,relatime
+network_interfaces=lo

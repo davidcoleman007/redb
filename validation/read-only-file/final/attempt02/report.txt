@@ -1,0 +1,29 @@
+EXACT-COMMIT SANDBOX VALIDATION: ATTEMPT 02 FAILED
+
+Feature: d78f54e0cea93e60cb70ccdde4b065871d40c474
+Tree: 8d0d85cd84a724e10ed718e681e605e51a079a31
+Started: 2026-11-04T01:12:35+00:00
+Ended: 2026-11-04T01:12:40+00:00
+Command: just test
+Actual command exit status: 125
+
+Changed runner prerequisites since attempt 01:
+- Official Podman 5.6.2, crun 1.30.1, and Netavark 1.16.0.
+- Owner-approved memory/PID controller delegation.
+- Supported cgroups=split configuration for the isolated rootless account.
+- runtime-controls.log verifies memory.max=8589934592, pids.max=2048,
+  CapEff=0, NoNewPrivs=1, Seccomp=2, read-only root, and loopback-only networking.
+
+Audit and formatting passed. The image build reached its first RUN instruction,
+then private networking failed because /dev/net/tun was absent. The full error
+and commands are preserved in just-test.log.
+
+Clippy: NOT RUN.
+Rust test suites: NOT RUN; zero test cases executed.
+Completed sandbox image and image/source comparison: NOT PRODUCED / NOT RUN.
+Feature SHA, clean tracked/untracked status, and supplied source hashes were
+verified unchanged after the attempt.
+
+This failure was retained separately. No feature, justfile, Containerfile, or
+sandbox script was edited, and no security or resource control was disabled.
+The later authorized TUN provisioning does not retroactively pass this attempt.

@@ -1,0 +1,97 @@
+cargo deny --workspace --all-features check licenses advisories
+advisories ok, licenses ok
+cargo fmt --all -- --check
+./scripts/podman-sandbox.sh 'just _checks_no_sandbox'
+STEP 1/9: FROM docker.io/library/rust:1.90-bookworm
+STEP 2/9: ARG RUST_VERSION
+--> Using cache eb5c9a3928d5437702c46536105c41b818d2bf3587893ed8bd47c6138bd879a8
+--> eb5c9a3928d5
+STEP 3/9: ARG DEBIAN_FRONTEND=noninteractive
+--> Using cache 00913a6178659176be56b09f20dbfcdbb29fc30c88a3f1a4b0f814b9aa23b696
+--> 00913a617865
+STEP 4/9: RUN apt-get update     && apt-get install --no-install-recommends --yes libclang-dev     && rm -rf /var/lib/apt/lists/*
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8689 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [358 kB]
+Fetched 9296 kB in 16s (564 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libclang-14-dev libclang-common-14-dev libclang1-14 libgc1 libllvm14
+  libobjc-12-dev libobjc4 libz3-4
+Recommended packages:
+  libclang-rt-14-dev
+The following NEW packages will be installed:
+  libclang-14-dev libclang-common-14-dev libclang-dev libclang1-14 libgc1
+  libllvm14 libobjc-12-dev libobjc4 libz3-4
+0 upgraded, 9 newly installed, 0 to remove and 134 not upgraded.
+Need to get 54.9 MB of archives.
+After this operation, 428 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main arm64 libgc1 arm64 1:8.2.2-3 [239 kB]
+Get:2 http://deb.debian.org/debian bookworm/main arm64 libobjc4 arm64 12.2.0-14+deb12u1 [39.0 kB]
+Get:3 http://deb.debian.org/debian bookworm/main arm64 libobjc-12-dev arm64 12.2.0-14+deb12u1 [165 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 libz3-4 arm64 4.8.12-3.1 [6282 kB]
+Get:5 http://deb.debian.org/debian bookworm/main arm64 libllvm14 arm64 1:14.0.6-12 [19.3 MB]
+Get:6 http://deb.debian.org/debian bookworm/main arm64 libclang1-14 arm64 1:14.0.6-12 [5465 kB]
+Get:7 http://deb.debian.org/debian bookworm/main arm64 libclang-common-14-dev all 1:14.0.6-12 [890 kB]
+Get:8 http://deb.debian.org/debian bookworm/main arm64 libclang-14-dev arm64 1:14.0.6-12 [22.5 MB]
+Get:9 http://deb.debian.org/debian bookworm/main arm64 libclang-dev arm64 1:14.0-55.7~deb12u1 [4728 B]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 54.9 MB in 1s (47.9 MB/s)
+Selecting previously unselected package libgc1:arm64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 23280 files and directories currently installed.)
+Preparing to unpack .../0-libgc1_1%3a8.2.2-3_arm64.deb ...
+Unpacking libgc1:arm64 (1:8.2.2-3) ...
+Selecting previously unselected package libobjc4:arm64.
+Preparing to unpack .../1-libobjc4_12.2.0-14+deb12u1_arm64.deb ...
+Unpacking libobjc4:arm64 (12.2.0-14+deb12u1) ...
+Selecting previously unselected package libobjc-12-dev:arm64.
+Preparing to unpack .../2-libobjc-12-dev_12.2.0-14+deb12u1_arm64.deb ...
+Unpacking libobjc-12-dev:arm64 (12.2.0-14+deb12u1) ...
+Selecting previously unselected package libz3-4:arm64.
+Preparing to unpack .../3-libz3-4_4.8.12-3.1_arm64.deb ...
+Unpacking libz3-4:arm64 (4.8.12-3.1) ...
+Selecting previously unselected package libllvm14:arm64.
+Preparing to unpack .../4-libllvm14_1%3a14.0.6-12_arm64.deb ...
+Unpacking libllvm14:arm64 (1:14.0.6-12) ...
+Selecting previously unselected package libclang1-14.
+Preparing to unpack .../5-libclang1-14_1%3a14.0.6-12_arm64.deb ...
+Unpacking libclang1-14 (1:14.0.6-12) ...
+Selecting previously unselected package libclang-common-14-dev.
+Preparing to unpack .../6-libclang-common-14-dev_1%3a14.0.6-12_all.deb ...
+Unpacking libclang-common-14-dev (1:14.0.6-12) ...
+Selecting previously unselected package libclang-14-dev.
+Preparing to unpack .../7-libclang-14-dev_1%3a14.0.6-12_arm64.deb ...
+Unpacking libclang-14-dev (1:14.0.6-12) ...
+Selecting previously unselected package libclang-dev.
+Preparing to unpack .../8-libclang-dev_1%3a14.0-55.7~deb12u1_arm64.deb ...
+Unpacking libclang-dev (1:14.0-55.7~deb12u1) ...
+Setting up libz3-4:arm64 (4.8.12-3.1) ...
+Setting up libgc1:arm64 (1:8.2.2-3) ...
+Setting up libllvm14:arm64 (1:14.0.6-12) ...
+Setting up libclang1-14 (1:14.0.6-12) ...
+Setting up libobjc4:arm64 (12.2.0-14+deb12u1) ...
+Setting up libclang-common-14-dev (1:14.0.6-12) ...
+Setting up libobjc-12-dev:arm64 (12.2.0-14+deb12u1) ...
+Setting up libclang-14-dev (1:14.0.6-12) ...
+Setting up libclang-dev (1:14.0-55.7~deb12u1) ...
+Processing triggers for libc-bin (2.36-9+deb12u13) ...
+--> d05ceaca499e
+STEP 5/9: RUN rustup component add clippy rustfmt     && cargo install --locked --version 1.36.0 just     && cargo install --locked --version 0.20.2 cargo-deny     && rm -rf /usr/local/cargo/git /usr/local/cargo/registry
+info: downloading component 'clippy'
+error: failed to download file error=Reqwest(reqwest::Error { kind: Request, url: "https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz", source: hyper_util::client::legacy::Error(Connect, Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) })
+info: retrying download for 'https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz'
+error: failed to download file error=Reqwest(reqwest::Error { kind: Request, url: "https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz", source: hyper_util::client::legacy::Error(Connect, Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) })
+info: retrying download for 'https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz'
+error: failed to download file error=Reqwest(reqwest::Error { kind: Request, url: "https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz", source: hyper_util::client::legacy::Error(Connect, Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) })
+info: retrying download for 'https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz'
+error: failed to download file error=Reqwest(reqwest::Error { kind: Request, url: "https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz", source: hyper_util::client::legacy::Error(Connect, Os { code: 104, kind: ConnectionReset, message: "Connection reset by peer" }) })
+info: retrying download for 'https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz'
+error: component download failed for clippy-aarch64-unknown-linux-gnu: could not download file from 'https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz' to '/usr/local/rustup/downloads/1a7f969c5712c17d960d6fba8235b33f264a9484b369dc388766a540f1ba464f.partial': error downloading file: error sending request for url (https://static.rust-lang.org/dist/2025-09-18/clippy-1.90.0-aarch64-unknown-linux-gnu.tar.xz): client error (Connect): Connection reset by peer (os error 104)
+Error: building at STEP "RUN rustup component add clippy rustfmt     && cargo install --locked --version 1.36.0 just     && cargo install --locked --version 0.20.2 cargo-deny     && rm -rf /usr/local/cargo/git /usr/local/cargo/registry": while running runtime: exit status 1
+error: Recipe `_checks` failed on line 18 with exit code 1

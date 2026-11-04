@@ -1,0 +1,37 @@
+EXACT-COMMIT SANDBOX VALIDATION: ATTEMPT 03 FAILED
+
+Feature: d78f54e0cea93e60cb70ccdde4b065871d40c474
+Tree: 8d0d85cd84a724e10ed718e681e605e51a079a31
+Started: 2026-11-04T01:21:04+00:00
+Ended: 2026-11-04T01:21:39+00:00
+Command: just test
+Actual command exit status: 1
+
+Changed runner prerequisites since attempt 02:
+- Owner-authorized TUN module/device provisioning. The module came from the
+  exact Debian 6.12.113-1 kernel package, whose checksum was verified against
+  a package index authenticated by official Debian archive signatures.
+- Only the matching TUN module was installed and normally loaded. No kernel
+  replacement, reboot, forced module loading, or host networking was used.
+- Official pasta source commit 6aa4f88bd9846411edff3ed70460475b538addca
+  supplied private build networking. Only the existing proxy TCP port was
+  forwarded into private namespaces; no broad host-loopback mapping was enabled.
+- The enforced limits and other security controls from attempt 02 were retained.
+
+Audit and formatting passed. Private image-build networking and installation of
+libclang succeeded. Image construction then failed downloading Rust clippy:
+the localhost proxy's IPv6 endpoint reset connections.
+
+A separate subsequent address-family check returned HTTP 200 through IPv4 for
+the exact clippy URL and a connection reset through IPv6. That diagnosis is not
+a test pass. Later IPv4 proxy normalization does not retroactively pass this run.
+
+Clippy: NOT RUN.
+Rust test suites: NOT RUN; zero test cases executed.
+Completed sandbox image and image/source comparison: NOT PRODUCED / NOT RUN.
+Feature SHA, clean tracked/untracked status, and supplied source hashes were
+verified unchanged after the attempt.
+
+The full transcript is retained in just-test.log. No feature, justfile,
+Containerfile, or sandbox script was edited, and no security/resource control
+was disabled.

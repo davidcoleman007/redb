@@ -1,0 +1,6 @@
+cargo deny --workspace --all-features check licenses advisories
+advisories ok, licenses ok
+cargo fmt --all -- --check
+./scripts/podman-sandbox.sh 'just _checks_no_sandbox'
+Error: invalid argument "missing" for "--pull" flag: strconv.ParseBool: parsing "missing": invalid syntax
+error: Recipe `_checks` failed on line 18 with exit code 125

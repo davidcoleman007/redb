@@ -1,0 +1,47 @@
+{
+  "podman": {
+    "version": "5.6.2",
+    "source_commit": "9dd5e1ed33830612bc200d7a13db00af6ab865a4",
+    "build_security_features": [
+      "seccomp",
+      "apparmor",
+      "systemd"
+    ],
+    "binary_sha256": "955523dce75ef310847d85e2949e8231f3ced969e0f8b51fed1d88d2441e18c2"
+  },
+  "crun": {
+    "version": "1.30.1",
+    "official_asset_sha256": "0ef30b0fbb494dc9c5303d46b091a84e27cb8ac99c985123fb1eb339854b69ea",
+    "binary_sha256": "0ef30b0fbb494dc9c5303d46b091a84e27cb8ac99c985123fb1eb339854b69ea"
+  },
+  "netavark": {
+    "version": "1.16.0",
+    "source_commit": "99f73d4e9569069e8fa3c2accd2a9b12b7d9afaa",
+    "binary_sha256": "c9b318cbcd2c39e2d37f8c1206860cb652b73c7068572c48891d695a6dfc55ad"
+  },
+  "pasta": {
+    "reported_version": "unknown version (shallow source checkout)",
+    "source_commit": "6aa4f88bd9846411edff3ed70460475b538addca",
+    "binary_sha256": "dda191ef06c2145473d95491510e52ff08872dd0629740dffb31fb0ba3a20654"
+  },
+  "tun": {
+    "kernel": "6.12.113+deb13-arm64",
+    "debian_package_version": "6.12.113-1",
+    "package_sha256": "fb1d4ff8bffc992b9b7e073f9a07d1ce378c041cfba78bb8e039c15a504b3129",
+    "module_sha256": "8733055f67249b738b73aa4793f5e8016f9173ee45d26593a24d89b85832070f",
+    "repository_authentication": "Debian bookworm and trixie security archive signatures verified; package index and package SHA256 checked"
+  },
+  "runner_configuration": {
+    "rootless": true,
+    "cgroups": "split",
+    "delegated_controllers": [
+      "memory",
+      "pids"
+    ],
+    "private_build_network": "pasta",
+    "namespace_to_existing_proxy_tcp_port": 3128,
+    "broad_host_loopback_mapping": false,
+    "test_network": "none",
+    "proxy_hostname_normalization": "localhost -> 127.0.0.1 (same existing endpoint)"
+  }
+}

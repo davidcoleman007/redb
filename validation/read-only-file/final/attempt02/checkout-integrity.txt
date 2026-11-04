@@ -1,0 +1,1 @@
+PASS: feature SHA, tracked/untracked status, and source hashes unchanged.
