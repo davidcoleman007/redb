@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import errno
 import gc
 import math
 import threading
@@ -25,8 +26,16 @@ def test_errors_form_a_flat_hierarchy() -> None:
     subclasses.remove(redb.Error)
     assert redb.Io in subclasses
     assert redb.TransactionCompleted in subclasses
+    # A few are also the builtin exception that Python code would expect
+    also_builtin = {
+        redb.Io: OSError,
+        redb.TableChangedDuringIteration: RuntimeError,
+        redb.TransactionInUse: RuntimeError,
+    }
     for cls in subclasses:
-        assert cls.__bases__ == (redb.Error,)
+        builtin = also_builtin.get(cls)
+        assert cls.__bases__ == ((redb.Error, builtin) if builtin else (redb.Error,))
+        assert cls.__module__ == "redb"
 
 
 def test_star_import_does_not_shadow_builtins() -> None:
@@ -375,7 +384,7 @@ def test_changes_end_iteration(tmp_db_path: Path) -> None:
         entries = iter(users)
         assert next(entries) == (1, b"x")
         users[4] = b"x"
-        with pytest.raises(RuntimeError, match="changed during iteration"):
+        with pytest.raises(redb.TableChangedDuringIteration, match="changed during iteration"):
             next(entries)
         # ... but an exhausted iteration stays exhausted
         entries = iter(users)
@@ -437,7 +446,7 @@ def test_retain(tmp_db_path: Path) -> None:
             users.retain(picky)
         assert [key for key, _ in users] == [15, 16, 17, 18, 19]
         # A predicate cannot use the table it is filtering, which would wait for itself
-        with pytest.raises(RuntimeError, match="in use"):
+        with pytest.raises(redb.TransactionInUse, match="in use"):
             users.retain(lambda key, _: key in users)
         assert [key for key, _ in users] == [15, 16, 17, 18, 19]
         users.retain(lambda key, value: False)
@@ -675,8 +684,11 @@ def test_savepoints(tmp_db_path: Path) -> None:
 
 
 def test_open_functions(tmp_db_path: Path) -> None:
-    with pytest.raises(redb.Io):
-        redb.open(str(tmp_db_path))  # open() does not create
+    # open() does not create. A redb.Io is an OSError too, with the OS error number
+    with pytest.raises(redb.Io) as raised:
+        redb.open(str(tmp_db_path))
+    assert isinstance(raised.value, OSError)
+    assert raised.value.errno == errno.ENOENT
     db = redb.Database.create(str(tmp_db_path), concurrency=redb.MultiWriter)
     with db.begin_write() as txn:
         txn.open_table(USERS)[1] = b"alice"
