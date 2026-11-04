@@ -1,0 +1,108 @@
+REDB BACKEND API: EXACT-COMMIT ROOTLESS SANDBOX VALIDATION PASSED
+
+Public repository: https://github.com/davidcoleman007/redb
+Upstream PR: cberner/redb#1605
+Tested feature SHA: 1cd8025f44c59d03c2a3b33f185ebf1c9d534351
+Tested Git tree: c3cc2f199f058d843251c9fa9e1db9b578113d3e
+Command: just test
+Actual command exit status: 0 (PIPESTATUS[0], not tee)
+Attempt: 01 (one actual gate attempt, no gate retry)
+Started: 2026-11-04T04:48:58+00:00
+Ended: 2026-11-04T04:55:15+00:00
+
+Results
+
+669 passed, 0 failed, 0 ignored,
+0 filtered out: 660 unit/integration
+cases and 9 documentation cases, including three expected compile-fail
+documentation cases. Per-suite counts are in attempt01/test-totals.json.
+
+The unchanged recipe passed:
+- cargo deny --workspace --all-features check licenses advisories
+- cargo fmt --all -- --check
+- sandboxed just _checks_no_sandbox (cargo clippy --all-targets --all-features)
+- sandboxed RUST_BACKTRACE=1 cargo test --frozen --all-features
+
+Coverage includes the backend read-only API exercised with FileBackend and the
+in-memory backend, read-only locking, byte preservation, recovery refusal
+without mutation, and retained-file identity after pathname replacement.
+The basic_tests suite passed 130 cases.
+
+Identity and integrity
+
+The detached checkout was clean before and after the command at the exact
+SHA/tree above. All three expected source hashes matched before the command,
+afterward, and inside a separate no-network/read-only image verification run.
+Tested image: 95f85985b45aa38b80c8e95624cf88af65edefcb0816f63d5fdf92d0358b3117
+9c61b82cfa49cc0a7a8063ad3dbcc1fb9c4b539f339b136c4540fc5cb67a3fca  src/db.rs
+c9340a70d1b41a11edaa66e5e3216ba7eda4dd0ad1afef9822e54d60f774e829  tests/basic_tests.rs
+247accd7c4b44337cec935379438f938a3da230942b6aadcf3a30b55ebe794b7  CHANGELOG.md
+
+No feature source, recipe, sandbox script, Containerfile, dependency declaration
+or commit was changed. No branch was pushed and no public account authenticated.
+Earlier d78f54e receipts are historical, not evidence for this revision.
+
+Runtime and effective controls
+
+Linux6.12.113+deb13-arm64 aarch64, Ubuntu22.04 userspace.
+Rust/cargo1.90.0, just1.36.0, cargo-deny0.20.2.
+Rootless Podman5.6.2, crun1.30.1, Netavark1.16.0.
+Pasta is bound to official source commit6aa4f88bd9846411edff3ed70460475b538addca;
+its shallow checkout reports unknown version. Runtime executable digests and
+official source commits are in runtime-provenance.json.
+
+Both a prerequisite probe and an observation INSIDE the actual running test
+container verified memory.max=8589934592, pids.max=2048, CapEff=0,
+NoNewPrivs=1, Seccomp=2, read-only root and loopback-only interfaces.
+Actual image identity and container configuration match the tested image.
+The committed network-none, userns-keep-id, explicit unprivileged user,
+no-new-privileges, cap-drop-all, read-only, memory/PID limits and temporary
+storage settings were retained. No limits or protections were bypassed.
+No validation containers remain; runtime/source caches are retained for reuse.
+
+Environment repairs and preserved prerequisite failures
+
+The runner initially lacked a usable current Podman, pinned tools, shared
+memory and TUN support. Restored a private official-source Podman and network
+helpers, verified official crun/tool release checksums, and installed Rust1.90.
+Created only a dedicated validation account and delegated memory/PID subtree;
+no unrelated processes were moved. Restored a bounded64-MiB standard shared
+memory mount and normally loaded only the matching signed-distribution TUN
+module. No kernel replacement, reboot or forced loading.
+
+Preserved prerequisite failures: bare-digest checksum parser mismatch;
+inaccessible inherited working directory; missing netavark; helper Cargo/rustc
+version mismatch; missing shared-memory lock path; kernel package lookup in
+the wrong security suite; and a redundant device creation after devtmpfs had
+already created TUN. Each was repaired before the actual gate, without changing
+source or relaxing sandbox controls. These are not source-test failures.
+
+Private build networking forwarded only the existing proxy's required TCP port,
+using its working IPv4 endpoint. A full HTTPS endpoint check returned200.
+No broad host-loopback mapping, host networking, credentials, or test-network
+access was enabled. The full reusable runbook, launcher/config and original
+setup logs are retained separately in the private redb session folder.
+
+Packaging and redaction
+
+The delivered attempt transcript, commands, results and exit status are
+byte-preserved. The archive excludes host credentials, original host setup/build
+logs, machine-local launcher/config and private project material. Its public
+runtime provenance omits the local proxy port. No edits to the attempt transcript
+were necessary; it has no private paths, authenticated URLs or credential tokens.
+A generic substring scanner match was the standard package-manager word
+"directories", not a private project reference.
+
+Derived totals remove ANSI/terminal character-set escapes only while parsing.
+Initial summary parsing needed fixes for an ANSI charset selector and multiple
+doctest summaries under one heading. The parser reprocessed the same log,
+without rerunning tests or altering it.
+SHA256SUMS covers every delivered receipt file except itself.
+
+Platform/scope gaps
+
+This qualifies the exact rootless Linux ARM64 just-test run, not Linuxx86,
+macOS, Windows or additional optional build/fuzz/benchmark matrices.
+Other host and no_std results in the handoff were not rerun here.
+No consumer dependency upgrade or downstream integration qualification is
+inferred from this upstream-library test result.

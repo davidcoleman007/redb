@@ -1,0 +1,49 @@
+{
+  "created_at_utc": "2026-11-04T04:51:37.427436+00:00",
+  "host": "Linux 6.12.113+deb13-arm64 aarch64, Ubuntu22.04 userspace",
+  "tools": {
+    "podman": {
+      "version": "5.6.2",
+      "binary_sha256": "b0211b5b3b9de6758b8073e68fcfd96ae92bc96d34ac3f45b86202a25ec2bbb0",
+      "source_commit": "9dd5e1ed33830612bc200d7a13db00af6ab865a4"
+    },
+    "crun": {
+      "version": "1.30.1",
+      "binary_sha256": "0ef30b0fbb494dc9c5303d46b091a84e27cb8ac99c985123fb1eb339854b69ea"
+    },
+    "netavark": {
+      "version": "1.16.0",
+      "binary_sha256": "b7a34a8de676cb55d4e3305692a090d07d3531b0322606036bdd30307f62f89c",
+      "source_commit": "99f73d4e9569069e8fa3c2accd2a9b12b7d9afaa"
+    },
+    "pasta": {
+      "version": "unknown version (shallow source checkout)",
+      "binary_sha256": "dda191ef06c2145473d95491510e52ff08872dd0629740dffb31fb0ba3a20654",
+      "source_commit": "6aa4f88bd9846411edff3ed70460475b538addca"
+    },
+    "just": {
+      "version": "1.36.0",
+      "binary_sha256": "079f4eb5fec9d004745d9af48ad6431fba214b78e0b5f26530461322add466fb"
+    },
+    "cargo-deny": {
+      "version": "0.20.2",
+      "binary_sha256": "21e797104e371854dde7f05f52d834e70312749d361c168429ced996f2194462"
+    }
+  },
+  "rust": "1.90.0",
+  "configuration": {
+    "rootless": true,
+    "cgroup_manager": "cgroupfs",
+    "cgroups": "split",
+    "delegated_controllers": [
+      "memory",
+      "pids"
+    ],
+    "unrelated_processes_moved": false,
+    "private_build_network": "pasta",
+    "test_network": "none",
+    "broad_host_loopback_mapping": false
+  },
+  "tun_package_sha256": "fb1d4ff8bffc992b9b7e073f9a07d1ce378c041cfba78bb8e039c15a504b3129",
+  "source_commit": "1cd8025f44c59d03c2a3b33f185ebf1c9d534351"
+}

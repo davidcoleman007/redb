@@ -1,0 +1,1534 @@
+cargo deny --workspace --all-features check licenses advisories
+advisories ok, licenses ok
+cargo fmt --all -- --check
+./scripts/podman-sandbox.sh 'just _checks_no_sandbox'
+STEP 1/9: FROM docker.io/library/rust:1.90-bookworm
+STEP 2/9: ARG RUST_VERSION
+--> 7d14f7fea898
+STEP 3/9: ARG DEBIAN_FRONTEND=noninteractive
+--> 3388dcafb89e
+STEP 4/9: RUN apt-get update     && apt-get install --no-install-recommends --yes libclang-dev     && rm -rf /var/lib/apt/lists/*
+Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8689 kB]
+Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [358 kB]
+Fetched 9296 kB in 1s (6751 kB/s)
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libclang-14-dev libclang-common-14-dev libclang1-14 libgc1 libllvm14
+  libobjc-12-dev libobjc4 libz3-4
+Recommended packages:
+  libclang-rt-14-dev
+The following NEW packages will be installed:
+  libclang-14-dev libclang-common-14-dev libclang-dev libclang1-14 libgc1
+  libllvm14 libobjc-12-dev libobjc4 libz3-4
+0 upgraded, 9 newly installed, 0 to remove and 134 not upgraded.
+Need to get 54.9 MB of archives.
+After this operation, 428 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian bookworm/main arm64 libgc1 arm64 1:8.2.2-3 [239 kB]
+Get:2 http://deb.debian.org/debian bookworm/main arm64 libobjc4 arm64 12.2.0-14+deb12u1 [39.0 kB]
+Get:3 http://deb.debian.org/debian bookworm/main arm64 libobjc-12-dev arm64 12.2.0-14+deb12u1 [165 kB]
+Get:4 http://deb.debian.org/debian bookworm/main arm64 libz3-4 arm64 4.8.12-3.1 [6282 kB]
+Get:5 http://deb.debian.org/debian bookworm/main arm64 libllvm14 arm64 1:14.0.6-12 [19.3 MB]
+Get:6 http://deb.debian.org/debian bookworm/main arm64 libclang1-14 arm64 1:14.0.6-12 [5465 kB]
+Get:7 http://deb.debian.org/debian bookworm/main arm64 libclang-common-14-dev all 1:14.0.6-12 [890 kB]
+Get:8 http://deb.debian.org/debian bookworm/main arm64 libclang-14-dev arm64 1:14.0.6-12 [22.5 MB]
+Get:9 http://deb.debian.org/debian bookworm/main arm64 libclang-dev arm64 1:14.0-55.7~deb12u1 [4728 B]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 54.9 MB in 5s (10.1 MB/s)
+Selecting previously unselected package libgc1:arm64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 23280 files and directories currently installed.)
+Preparing to unpack .../0-libgc1_1%3a8.2.2-3_arm64.deb ...
+Unpacking libgc1:arm64 (1:8.2.2-3) ...
+Selecting previously unselected package libobjc4:arm64.
+Preparing to unpack .../1-libobjc4_12.2.0-14+deb12u1_arm64.deb ...
+Unpacking libobjc4:arm64 (12.2.0-14+deb12u1) ...
+Selecting previously unselected package libobjc-12-dev:arm64.
+Preparing to unpack .../2-libobjc-12-dev_12.2.0-14+deb12u1_arm64.deb ...
+Unpacking libobjc-12-dev:arm64 (12.2.0-14+deb12u1) ...
+Selecting previously unselected package libz3-4:arm64.
+Preparing to unpack .../3-libz3-4_4.8.12-3.1_arm64.deb ...
+Unpacking libz3-4:arm64 (4.8.12-3.1) ...
+Selecting previously unselected package libllvm14:arm64.
+Preparing to unpack .../4-libllvm14_1%3a14.0.6-12_arm64.deb ...
+Unpacking libllvm14:arm64 (1:14.0.6-12) ...
+Selecting previously unselected package libclang1-14.
+Preparing to unpack .../5-libclang1-14_1%3a14.0.6-12_arm64.deb ...
+Unpacking libclang1-14 (1:14.0.6-12) ...
+Selecting previously unselected package libclang-common-14-dev.
+Preparing to unpack .../6-libclang-common-14-dev_1%3a14.0.6-12_all.deb ...
+Unpacking libclang-common-14-dev (1:14.0.6-12) ...
+Selecting previously unselected package libclang-14-dev.
+Preparing to unpack .../7-libclang-14-dev_1%3a14.0.6-12_arm64.deb ...
+Unpacking libclang-14-dev (1:14.0.6-12) ...
+Selecting previously unselected package libclang-dev.
+Preparing to unpack .../8-libclang-dev_1%3a14.0-55.7~deb12u1_arm64.deb ...
+Unpacking libclang-dev (1:14.0-55.7~deb12u1) ...
+Setting up libz3-4:arm64 (4.8.12-3.1) ...
+Setting up libgc1:arm64 (1:8.2.2-3) ...
+Setting up libllvm14:arm64 (1:14.0.6-12) ...
+Setting up libclang1-14 (1:14.0.6-12) ...
+Setting up libobjc4:arm64 (12.2.0-14+deb12u1) ...
+Setting up libclang-common-14-dev (1:14.0.6-12) ...
+Setting up libobjc-12-dev:arm64 (12.2.0-14+deb12u1) ...
+Setting up libclang-14-dev (1:14.0.6-12) ...
+Setting up libclang-dev (1:14.0-55.7~deb12u1) ...
+Processing triggers for libc-bin (2.36-9+deb12u13) ...
+--> 2c2a4b941477
+STEP 5/9: RUN rustup component add clippy rustfmt     && cargo install --locked --version 1.36.0 just     && cargo install --locked --version 0.20.2 cargo-deny     && rm -rf /usr/local/cargo/git /usr/local/cargo/registry
+info: downloading component 'clippy'
+info: installing component 'clippy'
+info: downloading component 'rustfmt'
+info: installing component 'rustfmt'
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded just v1.36.0
+  Installing just v1.36.0
+    Updating crates.io index
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded anstyle-query v1.1.1
+  Downloaded anstyle v1.0.8
+  Downloaded arrayref v0.3.9
+  Downloaded block-buffer v0.10.4
+  Downloaded cfg-if v1.0.0
+  Downloaded autocfg v1.4.0
+  Downloaded bitflags v2.6.0
+  Downloaded crossbeam-utils v0.8.20
+  Downloaded arrayvec v0.7.6
+  Downloaded generic-array v0.14.7
+  Downloaded utf8parse v0.2.2
+  Downloaded shellexpand v3.1.0
+  Downloaded clap_lex v0.7.2
+  Downloaded once_cell v1.20.1
+  Downloaded zerocopy-derive v0.7.35
+  Downloaded ryu v1.0.18
+  Downloaded version_check v0.9.5
+  Downloaded strsim v0.11.1
+  Downloaded dotenvy v0.15.7
+  Downloaded digest v0.10.7
+  Downloaded constant_time_eq v0.3.1
+  Downloaded ctrlc v3.4.5
+  Downloaded strum v0.26.3
+  Downloaded rand_chacha v0.3.1
+  Downloaded cpufeatures v0.2.14
+  Downloaded clap_mangen v0.2.23
+  Downloaded is_terminal_polyfill v1.70.1
+  Downloaded fastrand v2.1.1
+  Downloaded terminal_size v0.3.0
+  Downloaded option-ext v0.2.0
+  Downloaded target v2.1.0
+  Downloaded unicode-ident v1.0.13
+  Downloaded typenum v1.17.0
+  Downloaded uuid v1.10.0
+  Downloaded similar v2.6.0
+  Downloaded unicode-segmentation v1.12.0
+  Downloaded snafu v0.8.5
+  Downloaded serde_json v1.0.128
+  Downloaded portable-atomic v1.9.0
+  Downloaded serde v1.0.210
+  Downloaded zerocopy v0.7.35
+  Downloaded clap_builder v4.5.18
+  Downloaded memchr v2.7.4
+  Downloaded syn v1.0.109
+  Downloaded regex v1.11.0
+  Downloaded unicode-width v0.2.0
+  Downloaded serde_derive v1.0.210
+  Downloaded semver v1.0.23
+  Downloaded syn v2.0.79
+  Downloaded rustix v0.38.37
+  Downloaded nix v0.29.0
+  Downloaded rayon-core v1.12.1
+  Downloaded regex-syntax v0.8.5
+  Downloaded rand v0.8.5
+  Downloaded ppv-lite86 v0.2.20
+  Downloaded iana-time-zone v0.1.61
+  Downloaded getrandom v0.2.15
+  Downloaded strum_macros v0.26.4
+  Downloaded shlex v1.3.0
+  Downloaded quote v1.0.37
+  Downloaded clap_derive v4.5.18
+  Downloaded regex-automata v0.4.8
+  Downloaded tempfile v3.13.0
+  Downloaded errno v0.3.9
+  Downloaded snafu-derive v0.8.5
+  Downloaded heck v0.5.0
+  Downloaded colorchoice v1.0.2
+  Downloaded chrono v0.4.38
+  Downloaded rustversion v1.0.17
+  Downloaded rand_core v0.6.4
+  Downloaded libc v0.2.159
+  Downloaded num_cpus v1.16.0
+  Downloaded cc v1.1.23
+  Downloaded lexiclean v0.0.1
+  Downloaded num-traits v0.2.19
+  Downloaded dirs v5.0.1
+  Downloaded crypto-common v0.1.6
+  Downloaded crossbeam-epoch v0.9.18
+  Downloaded clap_complete v4.5.29
+  Downloaded camino v1.1.9
+  Downloaded crossbeam-deque v0.8.5
+  Downloaded clap v4.5.18
+  Downloaded typed-arena v2.0.2
+  Downloaded sha2 v0.10.8
+  Downloaded roff v0.2.2
+  Downloaded proc-macro2 v1.0.86
+  Downloaded percent-encoding v2.3.1
+  Downloaded memmap2 v0.9.5
+  Downloaded itoa v1.0.11
+  Downloaded edit-distance v2.1.3
+  Downloaded cfg_aliases v0.2.1
+  Downloaded byteorder v1.5.0
+  Downloaded bstr v1.10.0
+  Downloaded blake3 v1.5.4
+  Downloaded aho-corasick v1.1.3
+  Downloaded dirs-sys v0.4.1
+  Downloaded derivative v2.2.0
+  Downloaded anstyle-parse v0.2.5
+  Downloaded anstream v0.6.15
+  Downloaded ansi_term v0.12.1
+  Downloaded linux-raw-sys v0.4.14
+   Compiling proc-macro2 v1.0.86
+   Compiling unicode-ident v1.0.13
+   Compiling libc v0.2.159
+   Compiling cfg-if v1.0.0
+   Compiling bitflags v2.6.0
+   Compiling rustix v0.38.37
+   Compiling heck v0.5.0
+   Compiling version_check v0.9.5
+   Compiling linux-raw-sys v0.4.14
+   Compiling typenum v1.17.0
+   Compiling crossbeam-utils v0.8.20
+   Compiling utf8parse v0.2.2
+   Compiling anstyle v1.0.8
+   Compiling is_terminal_polyfill v1.70.1
+   Compiling colorchoice v1.0.2
+   Compiling anstyle-query v1.1.1
+   Compiling strsim v0.11.1
+   Compiling anstyle-parse v0.2.5
+   Compiling rustversion v1.0.17
+   Compiling autocfg v1.4.0
+   Compiling byteorder v1.5.0
+   Compiling shlex v1.3.0
+   Compiling anstream v0.6.15
+   Compiling memchr v2.7.4
+   Compiling cfg_aliases v0.2.1
+   Compiling rayon-core v1.12.1
+   Compiling generic-array v0.14.7
+   Compiling clap_lex v0.7.2
+   Compiling nix v0.29.0
+   Compiling cc v1.1.23
+   Compiling syn v1.0.109
+   Compiling option-ext v0.2.0
+   Compiling serde v1.0.210
+   Compiling num-traits v0.2.19
+   Compiling serde_json v1.0.128
+   Compiling semver v1.0.23
+   Compiling camino v1.1.9
+   Compiling regex-syntax v0.8.5
+   Compiling roff v0.2.2
+   Compiling fastrand v2.1.1
+   Compiling quote v1.0.37
+   Compiling aho-corasick v1.1.3
+   Compiling crossbeam-epoch v0.9.18
+   Compiling arrayref v0.3.9
+   Compiling syn v2.0.79
+   Compiling once_cell v1.20.1
+   Compiling constant_time_eq v0.3.1
+   Compiling arrayvec v0.7.6
+   Compiling iana-time-zone v0.1.61
+   Compiling ryu v1.0.18
+   Compiling itoa v1.0.11
+   Compiling unicode-segmentation v1.12.0
+   Compiling crossbeam-deque v0.8.5
+   Compiling edit-distance v2.1.3
+   Compiling ansi_term v0.12.1
+   Compiling lexiclean v0.0.1
+   Compiling getrandom v0.2.15
+   Compiling dirs-sys v0.4.1
+   Compiling cpufeatures v0.2.14
+   Compiling memmap2 v0.9.5
+   Compiling dirs v5.0.1
+   Compiling rand_core v0.6.4
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.6
+   Compiling shellexpand v3.1.0
+   Compiling uuid v1.10.0
+   Compiling digest v0.10.7
+   Compiling chrono v0.4.38
+   Compiling num_cpus v1.16.0
+   Compiling similar v2.6.0
+   Compiling typed-arena v2.0.2
+   Compiling dotenvy v0.15.7
+   Compiling percent-encoding v2.3.1
+   Compiling blake3 v1.5.4
+   Compiling sha2 v0.10.8
+   Compiling unicode-width v0.2.0
+   Compiling target v2.1.0
+   Compiling terminal_size v0.3.0
+   Compiling tempfile v3.13.0
+   Compiling clap_builder v4.5.18
+   Compiling regex-automata v0.4.8
+   Compiling ctrlc v3.4.5
+   Compiling derivative v2.2.0
+   Compiling zerocopy-derive v0.7.35
+   Compiling clap_derive v4.5.18
+   Compiling serde_derive v1.0.210
+   Compiling strum_macros v0.26.4
+   Compiling snafu-derive v0.8.5
+   Compiling regex v1.11.0
+   Compiling zerocopy v0.7.35
+   Compiling ppv-lite86 v0.2.20
+   Compiling snafu v0.8.5
+   Compiling strum v0.26.3
+   Compiling rand_chacha v0.3.1
+   Compiling clap v4.5.18
+   Compiling rand v0.8.5
+   Compiling clap_complete v4.5.29
+   Compiling clap_mangen v0.2.23
+   Compiling just v1.36.0
+    Finished `release` profile [optimized] target(s) in 54.81s
+  Installing /usr/local/cargo/bin/just
+   Installed package `just v1.36.0` (executable `just`)
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded cargo-deny v0.20.2
+  Installing cargo-deny v0.20.2
+    Updating crates.io index
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded anstyle-query v1.1.5
+  Downloaded clap_lex v1.1.0
+  Downloaded anstyle v1.0.14
+  Downloaded crypto-common v0.1.7
+  Downloaded jobserver v0.1.34
+  Downloaded tinyvec_macros v0.1.1
+  Downloaded thiserror-impl v2.0.18
+  Downloaded find-msvc-tools v0.1.9
+  Downloaded pkg-config v0.3.33
+  Downloaded writeable v0.6.3
+  Downloaded stable_deref_trait v1.2.1
+  Downloaded either v1.16.0
+  Downloaded cfg-expr v0.20.7
+  Downloaded tinyvec v1.11.0
+  Downloaded serde_core v1.0.228
+  Downloaded walkdir v2.5.0
+  Downloaded zstd v0.13.3
+  Downloaded anstream v1.0.0
+  Downloaded twox-hash v2.1.2
+  Downloaded allocator-api2 v0.2.21
+  Downloaded toml-span v0.7.1
+  Downloaded synstructure v0.13.2
+  Downloaded clap v4.6.1
+  Downloaded zmij v1.0.21
+  Downloaded zerotrie v0.2.4
+  Downloaded zerovec-derive v0.11.3
+  Downloaded zstd-safe v7.2.4
+  Downloaded unicode-ident v1.0.24
+  Downloaded unicode-width v0.2.2
+  Downloaded target-lexicon v0.13.3
+  Downloaded zerovec v0.11.6
+  Downloaded tame-index v0.26.3
+  Downloaded termcolor v1.4.1
+  Downloaded serde v1.0.228
+  Downloaded indexmap v2.14.0
+  Downloaded http v1.4.0
+  Downloaded cc v1.2.62
+  Downloaded serde_json v1.0.150
+  Downloaded rayon v1.12.0
+  Downloaded clap_builder v4.6.0
+  Downloaded aho-corasick v1.1.4
+  Downloaded bstr v1.12.1
+  Downloaded goblin v0.10.5
+  Downloaded icu_properties_data v2.2.0
+  Downloaded bitvec v1.0.1
+  Downloaded syn v2.0.117
+  Downloaded regex-syntax v0.8.10
+  Downloaded fern v0.7.1
+  Downloaded regex v1.12.3
+  Downloaded zstd-sys v2.0.16+zstd.1.5.7
+  Downloaded url v2.5.8
+  Downloaded idna v1.1.0
+  Downloaded hashbrown v0.15.5
+  Downloaded hashbrown v0.17.1
+  Downloaded regex-automata v0.4.14
+  Downloaded memchr v2.8.0
+  Downloaded icu_properties v2.2.0
+  Downloaded icu_normalizer_data v2.2.0
+  Downloaded icu_normalizer v2.2.0
+  Downloaded icu_collections v2.2.0
+  Downloaded codespan-reporting v0.13.1
+  Downloaded serde_derive v1.0.228
+  Downloaded rayon-core v1.13.0
+  Downloaded litemap v0.8.2
+  Downloaded petgraph v0.8.1
+  Downloaded krates v0.21.2
+  Downloaded icu_provider v2.2.0
+  Downloaded icu_locale_core v2.2.0
+  Downloaded parking_lot v0.12.5
+  Downloaded crossbeam-epoch v0.9.20
+  Downloaded unicode-normalization v0.1.25
+  Downloaded smol_str v0.3.2
+  Downloaded smallvec v1.15.1
+  Downloaded semver v1.0.28
+  Downloaded quote v1.0.45
+  Downloaded parking_lot_core v0.9.12
+  Downloaded memmap2 v0.9.11
+  Downloaded lock_api v0.4.14
+  Downloaded jiff v0.2.24
+  Downloaded getrandom v0.2.17
+  Downloaded libc v0.2.186
+  Downloaded funty v2.0.0
+  Downloaded foldhash v0.1.5
+  Downloaded fixedbitset v0.5.7
+  Downloaded displaydoc v0.2.5
+  Downloaded crossbeam-utils v0.8.21
+  Downloaded crossbeam-queue v0.3.12
+  Downloaded crossbeam-deque v0.8.6
+  Downloaded cpufeatures v0.2.17
+  Downloaded colorchoice v1.0.5
+  Downloaded cfg-if v1.0.4
+  Downloaded ring v0.17.14
+  Downloaded tap v1.0.1
+  Downloaded strum_macros v0.28.0
+  Downloaded strum v0.28.0
+  Downloaded sha2 v0.10.9
+  Downloaded scroll v0.13.0
+  Downloaded rustc-stable-hash v0.1.2
+  Downloaded plain v0.2.3
+  Downloaded nu-ansi-term v0.50.3
+  Downloaded form_urlencoded v1.2.2
+  Downloaded crossbeam v0.8.4
+  Downloaded bytes v1.11.1
+  Downloaded borsh v1.6.1
+  Downloaded same-file v1.0.6
+  Downloaded potential_utf v0.1.5
+  Downloaded itoa v1.0.18
+  Downloaded equivalent v1.0.2
+  Downloaded codespan v0.13.1
+  Downloaded yoke-derive v0.8.2
+  Downloaded yoke v0.8.2
+  Downloaded thiserror v2.0.18
+  Downloaded scopeguard v1.2.0
+  Downloaded percent-encoding v2.3.2
+  Downloaded idna_adapter v1.2.2
+  Downloaded wyz v0.5.1
+  Downloaded typenum v1.20.0
+  Downloaded scroll_derive v0.13.1
+  Downloaded radium v0.7.0
+  Downloaded zerofrom-derive v0.1.7
+  Downloaded zerofrom v0.1.8
+  Downloaded utf8_iter v1.0.4
+  Downloaded untrusted v0.9.0
+  Downloaded tinystr v0.8.3
+  Downloaded proc-macro2 v1.0.106
+  Downloaded log v0.4.29
+  Downloaded anyhow v1.0.103
+  Downloaded is_terminal_polyfill v1.70.2
+  Downloaded globset v0.4.18
+  Downloaded spdx v0.13.4
+  Downloaded anstyle-parse v1.0.0
+  Downloaded camino v1.2.2
+  Downloaded crossbeam-channel v0.5.15
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling libc v0.2.186
+   Compiling stable_deref_trait v1.2.1
+   Compiling serde_core v1.0.228
+   Compiling smallvec v1.15.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v1.3.0
+   Compiling crossbeam-utils v0.8.21
+   Compiling memchr v2.8.0
+   Compiling version_check v0.9.5
+   Compiling serde v1.0.228
+   Compiling writeable v0.6.3
+   Compiling pkg-config v0.3.33
+   Compiling crossbeam-epoch v0.9.20
+   Compiling litemap v0.8.2
+   Compiling icu_normalizer_data v2.2.0
+   Compiling typenum v1.20.0
+   Compiling cfg-if v1.0.4
+   Compiling utf8_iter v1.0.4
+   Compiling icu_properties_data v2.2.0
+   Compiling zmij v1.0.21
+   Compiling unicode-width v0.2.2
+   Compiling termcolor v1.4.1
+   Compiling itoa v1.0.18
+   Compiling generic-array v0.14.7
+   Compiling zstd-safe v7.2.4
+   Compiling regex-syntax v0.8.10
+   Compiling utf8parse v0.2.2
+   Compiling camino v1.2.2
+   Compiling rayon-core v1.13.0
+   Compiling equivalent v1.0.2
+   Compiling serde_json v1.0.150
+   Compiling aho-corasick v1.1.4
+   Compiling target-lexicon v0.13.3
+   Compiling anstyle-parse v1.0.0
+   Compiling anstyle-query v1.1.5
+   Compiling allocator-api2 v0.2.21
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling tinyvec_macros v0.1.1
+   Compiling colorchoice v1.0.5
+   Compiling log v0.4.29
+   Compiling anstyle v1.0.14
+   Compiling hashbrown v0.17.1
+   Compiling radium v0.7.0
+   Compiling thiserror v2.0.18
+   Compiling foldhash v0.1.5
+   Compiling parking_lot_core v0.9.12
+   Compiling syn v2.0.117
+   Compiling crossbeam-deque v0.8.6
+   Compiling anstream v1.0.0
+   Compiling tinyvec v1.11.0
+   Compiling hashbrown v0.15.5
+   Compiling percent-encoding v2.3.2
+   Compiling tap v1.0.1
+   Compiling anyhow v1.0.103
+   Compiling jobserver v0.1.34
+   Compiling bytes v1.11.1
+   Compiling heck v0.5.0
+   Compiling cpufeatures v0.2.17
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling clap_lex v1.1.0
+   Compiling cc v1.2.62
+   Compiling indexmap v2.14.0
+   Compiling scopeguard v1.2.0
+   Compiling fixedbitset v0.5.7
+   Compiling strsim v0.11.1
+   Compiling digest v0.10.7
+   Compiling either v1.16.0
+   Compiling lock_api v0.4.14
+   Compiling unicode-normalization v0.1.25
+   Compiling clap_builder v4.6.0
+   Compiling rayon v1.12.0
+   Compiling sha2 v0.10.9
+   Compiling getrandom v0.2.17
+   Compiling http v1.4.0
+   Compiling cfg-expr v0.20.7
+   Compiling wyz v0.5.1
+   Compiling form_urlencoded v1.2.2
+   Compiling regex-automata v0.4.14
+   Compiling crossbeam-queue v0.3.12
+   Compiling crossbeam-channel v0.5.15
+   Compiling bstr v1.12.1
+   Compiling funty v2.0.0
+   Compiling plain v0.2.3
+   Compiling petgraph v0.8.1
+   Compiling same-file v1.0.6
+   Compiling rustc-stable-hash v0.1.2
+   Compiling twox-hash v2.1.2
+   Compiling untrusted v0.9.0
+   Compiling semver v1.0.28
+   Compiling crossbeam v0.8.4
+   Compiling bitvec v1.0.1
+   Compiling walkdir v2.5.0
+   Compiling parking_lot v0.12.5
+   Compiling zstd-sys v2.0.16+zstd.1.5.7
+   Compiling ring v0.17.14
+   Compiling synstructure v0.13.2
+   Compiling memmap2 v0.9.11
+   Compiling fern v0.7.1
+   Compiling nu-ansi-term v0.50.3
+   Compiling jiff v0.2.24
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling zerovec-derive v0.11.3
+   Compiling displaydoc v0.2.5
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling scroll_derive v0.13.1
+   Compiling strum_macros v0.28.0
+   Compiling regex v1.12.3
+   Compiling globset v0.4.18
+   Compiling clap v4.6.1
+   Compiling zerofrom v0.1.8
+   Compiling yoke v0.8.2
+   Compiling scroll v0.13.0
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling goblin v0.10.5
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling icu_collections v2.2.0
+   Compiling icu_locale_core v2.2.0
+   Compiling strum v0.28.0
+   Compiling codespan-reporting v0.13.1
+   Compiling smol_str v0.3.2
+   Compiling krates v0.21.2
+   Compiling icu_provider v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling icu_normalizer v2.2.0
+   Compiling toml-span v0.7.1
+   Compiling codespan v0.13.1
+   Compiling tame-index v0.26.3
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+   Compiling zstd v0.13.3
+   Compiling spdx v0.13.4
+   Compiling cargo-deny v0.20.2
+    Finished `release` profile [optimized] target(s) in 1m 43s
+  Installing /usr/local/cargo/bin/cargo-deny
+   Installed package `cargo-deny v0.20.2` (executable `cargo-deny`)
+--> 2f9346991e18
+STEP 6/9: ENV RUSTUP_TOOLCHAIN=${RUST_VERSION}
+--> 8afe3834eff8
+STEP 7/9: WORKDIR /workspace
+--> 0cd75b7c9bd7
+STEP 8/9: COPY . /workspace
+--> 6c1027e15814
+STEP 9/9: RUN CARGO_HOME=/tmp/cargo HOME=/tmp/home cargo generate-lockfile     && if ! CARGO_HOME=/tmp/cargo HOME=/tmp/home         cargo vendor --locked --versioned-dirs /vendor         > /tmp/vendor-config.toml 2> /tmp/vendor.log; then         cat /tmp/vendor.log >&2; exit 1;     fi     && cp /tmp/vendor-config.toml .cargo/config.toml     && printf '\n[net]\noffline = true\n' >> .cargo/config.toml     && rm -rf /tmp/cargo /tmp/home /tmp/vendor-config.toml /tmp/vendor.log
+    Updating crates.io index
+     Locking 245 packages to latest Rust 1.90 compatible versions
+      Adding comfy-table v7.2.2 (available: v8.0.1)
+      Adding fjall v3.1.6 (available: v3.1.13)
+      Adding heed v0.22.1 (available: v0.23.1)
+      Adding pyo3 v0.29.3 (available: v0.30.1)
+      Adding pyo3-build-config v0.29.3 (available: v0.30.1)
+      Adding redb v2.6.0 (available: v2.6.4)
+      Adding redb v3.0.0 (available: v3.1.3)
+      Adding rocksdb v0.24.0 (available: v0.25.0)
+      Adding rusqlite v0.38.0 (available: v0.41.1)
+      Adding syn v2.0.119 (available: v3.0.9)
+COMMIT localhost/redb-sandbox:latest
+--> 95f85985b45a
+Successfully tagged localhost/redb-sandbox:latest
+95f85985b45aa38b80c8e95624cf88af65edefcb0816f63d5fdf92d0358b3117
+[1mcargo clippy --all-targets --all-features[0m
+[1m[32m   Compiling[0m proc-macro2 v1.0.107
+[1m[32m   Compiling[0m libc v0.2.191
+[1m[32m   Compiling[0m quote v1.0.47
+[1m[32m    Checking[0m cfg-if v1.0.5
+[1m[32m   Compiling[0m getrandom v0.4.3
+[1m[32m    Checking[0m rand_core v0.10.1
+[1m[32m   Compiling[0m unicode-ident v1.0.27
+[1m[32m   Compiling[0m autocfg v1.5.1
+[1m[32m   Compiling[0m redb v4.4.0 (/workspace)
+[1m[32m    Checking[0m iana-time-zone v0.1.65
+[1m[32m   Compiling[0m rustix v1.1.6
+[1m[32m   Compiling[0m num-traits v0.2.19
+[1m[32m   Compiling[0m syn v2.0.119
+[1m[32m    Checking[0m bitflags v2.13.2
+[1m[32m    Checking[0m linux-raw-sys v0.12.1
+[1m[32m    Checking[0m chrono v0.4.45
+[1m[32m    Checking[0m uuid v1.29.0
+[1m[32m    Checking[0m log v0.4.35
+[1m[32m    Checking[0m fastrand v2.5.0
+[1m[32m    Checking[0m once_cell v1.21.4
+[1m[32m   Compiling[0m redb v2.6.0
+[1m[32m    Checking[0m tempfile v3.27.0
+[1m[32m    Checking[0m chacha20 v0.10.2
+[1m[32m    Checking[0m rand v0.10.3
+[1m[32m   Compiling[0m target-lexicon v0.13.5
+[1m[32m   Compiling[0m pyo3-build-config v0.29.3
+[1m[32m   Compiling[0m redb v3.0.0
+[1m[32m   Compiling[0m heck v0.5.0
+[1m[32m   Compiling[0m pyo3-macros-backend v0.29.3
+[1m[32m   Compiling[0m pyo3-ffi v0.29.3
+[1m[32m   Compiling[0m pyo3 v0.29.3
+[1m[32m   Compiling[0m redb-derive v0.2.0 (/workspace/crates/redb-derive)
+[1m[32m   Compiling[0m redb-python v0.5.0 (/workspace/crates/redb-python)
+[1m[32m   Compiling[0m pyo3-macros v0.29.3
+[1m[32m    Checking[0m redb-derive-rename-test v0.0.0 (/workspace/crates/redb-derive-rename-test)
+[1m[32m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 15.96s
+./scripts/podman-sandbox.sh 'RUST_BACKTRACE=1 cargo test --frozen --all-features'
+STEP 1/9: FROM docker.io/library/rust:1.90-bookworm
+STEP 2/9: ARG RUST_VERSION
+--> Using cache 7d14f7fea8982b949a68a909e0d2cd7219e1e89b88a4d8c5466262199863f729
+--> 7d14f7fea898
+STEP 3/9: ARG DEBIAN_FRONTEND=noninteractive
+--> Using cache 3388dcafb89e802c2f033b7268a7c776af917057005bbb42cf397e6191fe7fc1
+--> 3388dcafb89e
+STEP 4/9: RUN apt-get update     && apt-get install --no-install-recommends --yes libclang-dev     && rm -rf /var/lib/apt/lists/*
+--> Using cache 2c2a4b941477c67087d73587444428178f0e02f3c560248abee1dfd1cfff01f7
+--> 2c2a4b941477
+STEP 5/9: RUN rustup component add clippy rustfmt     && cargo install --locked --version 1.36.0 just     && cargo install --locked --version 0.20.2 cargo-deny     && rm -rf /usr/local/cargo/git /usr/local/cargo/registry
+--> Using cache 2f9346991e18f252b4e1961b5ac177c05f0a9a8c47edf1cc7608451e7dc0d45e
+--> 2f9346991e18
+STEP 6/9: ENV RUSTUP_TOOLCHAIN=${RUST_VERSION}
+--> Using cache 8afe3834eff8da78e4d4351ca04c492d770d4ce1fdf589f2f52491dae5589e42
+--> 8afe3834eff8
+STEP 7/9: WORKDIR /workspace
+--> Using cache 0cd75b7c9bd743b6b6288bcba137375c6d0f4f49847aa612da8e6bf29b802c23
+--> 0cd75b7c9bd7
+STEP 8/9: COPY . /workspace
+--> Using cache 6c1027e15814e35ac23028ccfb20b0b97bc6298a2f9c624c1171382f7cc84d8c
+--> 6c1027e15814
+STEP 9/9: RUN CARGO_HOME=/tmp/cargo HOME=/tmp/home cargo generate-lockfile     && if ! CARGO_HOME=/tmp/cargo HOME=/tmp/home         cargo vendor --locked --versioned-dirs /vendor         > /tmp/vendor-config.toml 2> /tmp/vendor.log; then         cat /tmp/vendor.log >&2; exit 1;     fi     && cp /tmp/vendor-config.toml .cargo/config.toml     && printf '\n[net]\noffline = true\n' >> .cargo/config.toml     && rm -rf /tmp/cargo /tmp/home /tmp/vendor-config.toml /tmp/vendor.log
+--> Using cache 95f85985b45aa38b80c8e95624cf88af65edefcb0816f63d5fdf92d0358b3117
+COMMIT localhost/redb-sandbox:latest
+--> 95f85985b45a
+Successfully tagged localhost/redb-sandbox:latest
+95f85985b45aa38b80c8e95624cf88af65edefcb0816f63d5fdf92d0358b3117
+[1m[32m   Compiling[0m libc v0.2.191
+[1m[32m   Compiling[0m cfg-if v1.0.5
+[1m[32m   Compiling[0m unicode-ident v1.0.27
+[1m[32m   Compiling[0m rand_core v0.10.1
+[1m[32m   Compiling[0m num-traits v0.2.19
+[1m[32m   Compiling[0m proc-macro2 v1.0.107
+[1m[32m   Compiling[0m bitflags v2.13.2
+[1m[32m   Compiling[0m redb v4.4.0 (/workspace)
+[1m[32m   Compiling[0m quote v1.0.47
+[1m[32m   Compiling[0m iana-time-zone v0.1.65
+[1m[32m   Compiling[0m syn v2.0.119
+[1m[32m   Compiling[0m linux-raw-sys v0.12.1
+[1m[32m   Compiling[0m chrono v0.4.45
+[1m[32m   Compiling[0m getrandom v0.4.3
+[1m[32m   Compiling[0m uuid v1.29.0
+[1m[32m   Compiling[0m rustix v1.1.6
+[1m[32m   Compiling[0m log v0.4.35
+[1m[32m   Compiling[0m fastrand v2.5.0
+[1m[32m   Compiling[0m once_cell v1.21.4
+[1m[32m   Compiling[0m redb v2.6.0
+[1m[32m   Compiling[0m tempfile v3.27.0
+[1m[32m   Compiling[0m chacha20 v0.10.2
+[1m[32m   Compiling[0m rand v0.10.3
+[1m[32m   Compiling[0m redb v3.0.0
+[1m[32m   Compiling[0m redb-derive v0.2.0 (/workspace/crates/redb-derive)
+[1m[32m   Compiling[0m pyo3-macros-backend v0.29.3
+[1m[32m   Compiling[0m pyo3-ffi v0.29.3
+[1m[32m   Compiling[0m pyo3-macros v0.29.3
+[1m[32m   Compiling[0m redb-python v0.5.0 (/workspace/crates/redb-python)
+[1m[32m   Compiling[0m redb-derive-rename-test v0.0.0 (/workspace/crates/redb-derive-rename-test)
+[1m[32m   Compiling[0m pyo3 v0.29.3
+[1m[32m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 38.42s
+[1m[32m     Running[0m unittests src/lib.rs (/target/debug/deps/redb-e4e9768885aea62e)
+
+running 274 tests
+test db::active_transaction_test::a_shared_mode_refuses_durability_none ... [32mok(B[m
+test db::active_transaction_test::a_lent_writer_byte_outlives_the_transaction ... [32mok(B[m
+test db::active_transaction_test::a_read_transaction_locks_the_id_it_reads_until_it_ends ... [32mok(B[m
+test db::active_transaction_test::a_read_only_handle_locks_what_it_reads ... [32mok(B[m
+test db::active_transaction_test::a_multi_writer_mode_refuses_an_ephemeral_savepoint ... [32mok(B[m
+test db::active_transaction_test::a_multi_writer_commit_records_the_allocator_state_regardless ... [32mok(B[m
+test db::active_transaction_test::an_exclusive_writer_read_does_not_puncture_the_whole_file_lock ... [32mok(B[m
+test db::active_transaction_test::a_shared_commit_is_two_phase ... [32mok(B[m
+test db::active_transaction_test::a_read_only_participant_picks_up_a_peers_commit ... [32mok(B[m
+test db::active_transaction_test::an_ephemeral_savepoint_locks_the_snapshot_it_references ... [32mok(B[m
+test db::active_transaction_test::a_persistent_savepoint_takes_no_active_transaction_byte ... [32mok(B[m
+test db::active_transaction_test::a_read_only_participant_takes_the_primary_as_recorded ... [32mok(B[m
+test db::active_transaction_test::a_lent_header_hold_outlives_the_commit ... [32mok(B[m
+test db::active_transaction_test::a_multi_writer_commit_keeps_its_read_cache ... [32mok(B[m
+test db::active_transaction_test::concurrent_readers_of_one_snapshot_share_the_lock ... [32mok(B[m
+test db::active_transaction_test::a_write_transaction_releases_the_writer_byte_and_slot ... [32mok(B[m
+test db::active_transaction_test::a_shared_read_refuses_an_unclean_file_with_no_writer ... [32mok(B[m
+test db::active_transaction_test::a_read_after_a_sync_keeps_the_transactions_cache ... [32mok(B[m
+test db::test::open_empty_file ... [32mok(B[m
+test db::test::open_missing_file ... [32mok(B[m
+test db::test::create_new_db_in_empty_file ... [32mok(B[m
+test db::active_transaction_test::a_lent_header_lock_covers_syncing_to_a_peers_commit ... [32mok(B[m
+test db::consistent_byte_test::an_open_takes_the_byte_before_it_publishes_the_flag ... [32mok(B[m
+test db::active_transaction_test::a_synced_persistent_savepoint_takes_no_active_transaction_byte ... [32mok(B[m
+test db::consistent_byte_test::a_shared_writable_open_asserts_consistency_until_it_closes ... [32mok(B[m
+test db::consistent_byte_test::a_repairing_open_asserts_consistency_only_once_the_repair_is_done ... [32mok(B[m
+test db::active_transaction_test::the_oldest_active_transaction_is_the_lower_of_ours_and_a_peers ... [32mok(B[m
+test db::active_transaction_test::an_integrity_check_repairs_a_leak_a_peer_recorded ... [32mok(B[m
+test db::active_transaction_test::an_integrity_check_records_a_peers_unrecorded_commit ... [32mok(B[m
+test db::test::small_pages3 ... [32mok(B[m
+test db::active_transaction_test::read_only_file_snapshots_preserve_memory_state_and_reuse_cache ... [32mok(B[m
+test db::test::crash_regression4 ... [32mok(B[m
+test db::test::small_pages4 ... [32mok(B[m
+test db::test::read_snapshot_survives_commits_before_construction ... [32mok(B[m
+test db::writer_byte_test::a_close_leaves_a_clean_file ... [32mok(B[m
+test db::unflushed_primary_test::a_commit_drops_no_cache_during_or_after_its_flush ... [32mok(B[m
+test db::test::small_pages ... [32mok(B[m
+test db::active_transaction_test::read_only_snapshot_survives_new_read_before_construction ... [32mok(B[m
+test db::test::transient_io_error ... [32mok(B[m
+test db::test::small_pages2 ... [32mok(B[m
+test db::writer_byte_test::a_multi_writer_transaction_holds_the_byte_and_gives_it_back ... [32mok(B[m
+test db::writer_byte_test::a_single_writer_open_holds_the_byte_for_its_lifetime ... [32mok(B[m
+test db::writer_byte_test::a_multi_writer_repair_records_the_allocator_state ... [32mok(B[m
+test db::unflushed_primary_test::a_peer_publishes_a_dead_writers_commit_when_it_reloads ... [32mok(B[m
+test db::unflushed_primary_test::the_previous_commit_is_served_until_the_flush_completes ... [32mok(B[m
+test db::unflushed_primary_test::the_flip_marks_the_primary_unflushed_and_a_write_after_the_flush_clears_it ... [32mok(B[m
+test db::writer_byte_test::a_sync_refuses_corruption_without_an_allocator_snapshot ... [32mok(B[m
+test io::no_std::test::accepts_an_owned_message ... [32mok(B[m
+test io::no_std::test::display_is_the_message ... [32mok(B[m
+test legacy_types::tests::legacy_drops_the_niche ... [32mok(B[m
+test db::writer_byte_test::a_transaction_outliving_the_database_keeps_the_writer_lock ... [32mok(B[m
+test sync::spin::test::mutex_debug ... [32mok(B[m
+test sync::spin::test::condvar_wakes_waiter ... [32mok(B[m
+test db::writer_byte_test::a_peer_opens_a_never_written_database_without_repair ... [32mok(B[m
+test db::writer_byte_test::the_shutdown_header_is_written_under_the_writer_byte_or_not_at_all ... [32mok(B[m
+test sync::spin::test::mutex_is_exclusive ... [32mok(B[m
+test sync::spin::test::mutex_try_lock ... [32mok(B[m
+test sync::spin::test::rwlock_readers_are_concurrent ... [32mok(B[m
+test transaction_tracker::test::syncing_a_reused_savepoint_id_replaces_its_identity_and_reference ... [32mok(B[m
+test sync::spin::test::rwlock_writer_is_exclusive ... [32mok(B[m
+test db::unflushed_primary_test::a_commit_whose_writer_died_in_the_flush_is_published_by_recovery ... [32mok(B[m
+test transactions::test::a_savepoint_naming_an_unrepresentable_transaction_is_corruption ... [32mok(B[m
+test transactions::test::failed_multi_writer_open_releases_locks_without_committing ... [32mok(B[m
+test transaction_tracker::test::non_durable_commit_without_freed_pages_is_not_unprocessed ... [32mok(B[m
+test transactions::test::check_integrity_clears_leak_latch ... [32mok(B[m
+test transactions::test::non_durable_commits_survive_the_close_after_a_caught_panic ... [32mok(B[m
+test transactions::test::discarded_allocator_state_poisons_database ... [32mok(B[m
+test db::writer_byte_test::a_transaction_releases_the_repair_a_panic_latched_without_a_peers_commit ... [32mok(B[m
+test tree_store::btree::tests::test_page_path_cycle_detection ... [32mok(B[m
+test tree_store::btree::tests::test_verify_checksum_cycle_detection ... [32mok(B[m
+test transactions::test::repair_commit_reserves_transaction_id ... [32mok(B[m
+test transactions::test::transaction_id_persistence ... [32mok(B[m
+test db::writer_byte_test::syncing_to_a_peers_commit_releases_the_repair_a_panic_latched ... [32mok(B[m
+test tree_store::btree_base::tests::fixed_width_keys_ignore_custom_separators ... [32mok(B[m
+test db::writer_byte_test::a_multi_writer_compaction_records_the_allocator_state ... [32mok(B[m
+test db::writer_byte_test::a_writer_recovers_after_interrupted_compaction ... [32mok(B[m
+test db::writer_byte_test::a_sync_rebuilds_a_missing_allocator_state ... [32mok(B[m
+test tree_store::btree_base::tests::leaf_split_promotes_separator ... [32mok(B[m
+test tree_store::btree::tests::test_cycle_detection_in_btree ... [32mok(B[m
+test tree_store::btree_cursor::tests::cursor_mut_stays_parked_at_tree_edge ... [32mok(B[m
+test transactions::test::post_commit_epilogue_reserves_transaction_id ... [32mok(B[m
+test tree_store::btree_cursor::tests::cursor_preserves_boundary_gap_after_failed_next ... [32mok(B[m
+test tree_store::btree_cursor::tests::cursor_preserves_boundary_gap_after_failed_prev ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_after_rejects_unordered_keys ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_into_leaf_middle ... [32mok(B[m
+test tree_store::btree_base::tests::leaf_inplace_insert_rejected_at_max_pairs ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_mixed_directions ... [32mok(B[m
+test tree_store::btree_base::tests::leaf_inplace_append_up_to_max_pairs ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_rejects_unordered_keys ... [32mok(B[m
+test tree_store::btree_base::tests::leaf_split_respects_max_pairs ... [32mok(B[m
+test tree_store::btree_cursor::tests::poisoned_cursor_mut_re_raises ... [32mok(B[m
+test tree_store::btree_base::tests::leaf_split_respects_max_pairs_by_count ... [32mok(B[m
+test transactions::test::pages_leaked_by_caught_panic_are_reclaimed_on_reopen ... [32mok(B[m
+test tree_store::page_store::active_transactions::test::the_scan_finds_the_lowest_held_byte_from_its_start ... [32mok(B[m
+test tree_store::page_store::active_transactions::test::the_scan_finds_the_oldest_of_many ... [32mok(B[m
+test tree_store::page_store::backends::test::debug_reads_through_a_poisoned_lock ... [32mok(B[m
+test tree_store::page_store::backends::test::debug_reports_length_not_contents ... [32mok(B[m
+test tree_store::page_store::backends::test::default_locks_are_unsupported ... [32mok(B[m
+test tree_store::page_store::base::test::last_page ... [32mok(B[m
+test tree_store::page_store::base::test::reserved_bits ... [32mok(B[m
+test tree_store::page_store::bitmap::test::all_space_used ... [32mok(B[m
+test tree_store::page_store::bitmap::test::alloc ... [32mok(B[m
+test tree_store::page_store::bitmap::test::find_free ... [32mok(B[m
+test tree_store::page_store::bitmap::test::free ... [32mok(B[m
+test db::writer_byte_test::a_multi_writer_open_reads_the_file_a_peer_committed_while_it_waited ... [32mok(B[m
+test tree_store::page_store::bitmap::test::record_alloc ... [32mok(B[m
+test tree_store::page_store::bitmap::test::resize_beyond_initial_capacity ... [32mok(B[m
+test tree_store::page_store::bitmap::test::reuse_lowest ... [32mok(B[m
+test tree_store::page_store::buddy_allocator::test::alloc_large ... [32mok(B[m
+test db::writer_byte_test::a_multi_writer_open_waits_for_the_writer_byte ... [32mok(B[m
+test tree_store::page_store::buddy_allocator::test::buddy_merge ... [32mok(B[m
+test tree_store::page_store::buddy_allocator::test::record_alloc_buddy ... [32mok(B[m
+test tree_store::page_store::cached_file::test::buffered_pages_spill_under_pressure ... [32mok(B[m
+test tree_store::page_store::buddy_allocator::test::serialized_size ... [32mok(B[m
+test db::writer_byte_test::an_open_waits_behind_a_creator_instead_of_calling_the_file_empty ... [32mok(B[m
+test tree_store::page_store::cached_file::test::discard_write_buffer_drops_buffered_pages ... [32mok(B[m
+test tree_store::page_store::cached_file::test::resize_discards_buffered_pages_past_eof ... [32mok(B[m
+test tree_store::page_store::cached_file::test::resize_discards_pages_straddling_eof ... [32mok(B[m
+test tree_store::page_store::cached_file::test::resize_failure_prevents_buffered_writes ... [32mok(B[m
+test tree_store::page_store::cached_file::test::resize_growth_preserves_writable_pages ... [32mok(B[m
+test tree_store::page_store::cached_file::test::resize_preserves_cached_pages ... [32mok(B[m
+test tree_store::page_store::cached_file::test::cache_leak ... [32mok(B[m
+test tree_store::page_store::cached_file::test::write_barrier_issues_no_file_writes ... [32mok(B[m
+test tree_store::page_store::cached_file::test::retained_pages_do_not_starve_read_cache ... [32mok(B[m
+test tree_store::page_store::cached_file::test::write_buffer_budget_enforced_across_stripes ... [32mok(B[m
+test tree_store::page_store::cached_file::test::write_direct_supersedes_a_buffered_write ... [32mok(B[m
+test tree_store::page_store::cached_file::test::zero_size_cache_stays_empty_after_reclaim ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::a_held_protocol_byte_reads_as_already_open ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::a_query_reports_the_locks_another_handle_holds ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::a_range_short_of_the_whole_storage_is_a_byte_range_lock_alone ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::a_refused_open_releases_what_it_took ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::a_writable_backend_holds_every_protocol_byte_exclusively ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::blocking_locks_use_large_offsets ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::blocking_whole_storage_locks_have_no_protocol_holes ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::close_releases_while_the_backend_is_still_alive ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::file_backend_locks_cover_growth_outside_reserved_bytes ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::large_lock_lengths_preserve_range_boundaries ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::large_lock_offsets_do_not_alias_lower_bytes ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::ordinary_unbounded_ranges_do_not_take_legacy_locks ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::query_mutex_is_released_after_conflicts_and_errors ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::query_mutex_keeps_successful_acquisitions_and_whole_storage_nonblocking ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::read_only_backends_share_the_protocol_bytes_with_each_other ... [32mok(B[m
+test tree_store::page_store::header::test::a_crash_after_the_create_needs_no_repair ... [32mok(B[m
+test tree_store::page_store::header::test::a_torn_first_commit_is_repaired ... [32mok(B[m
+test tree_store::page_store::header::test::abort_repair ... [32mok(B[m
+test tree_store::page_store::header::test::check_integrity_recomputes_root_lengths ... [32mok(B[m
+test tree_store::page_store::header::test::close_on_drop ... [32mok(B[m
+test tree_store::page_store::header::test::corrupt_header_layout_fields_are_rejected ... [32mok(B[m
+test db::test::dynamic_shrink ... [32mok(B[m
+test tree_store::page_store::header::test::magic_number ... [32mok(B[m
+test tree_store::page_store::header::test::externally_extended_file_is_rejected ... [32mok(B[m
+test tree_store::page_store::header::test::oversized_root_page_order_is_reported_as_corruption ... [32mok(B[m
+test tree_store::page_store::header::test::oversized_system_root_page_order_is_reported_as_corruption_read_only ... [32mok(B[m
+test tree_store::page_store::header::test::recovery_does_not_launder_torn_slot ... [32mok(B[m
+test tree_store::page_store::header::test::repair_allocator_checksums ... [32mok(B[m
+test tree_store::page_store::header::test::repair_empty ... [32mok(B[m
+test tree_store::page_store::header::test::repair_falls_back_to_secondary_on_invalid_primary_root ... [32mok(B[m
+test tree_store::page_store::header::test::oversized_region_count_file_is_rejected ... [32mok(B[m
+test tree_store::page_store::header::test::the_unflushed_mark_publishes_the_secondary_until_a_writer_clears_it ... [32mok(B[m
+test tree_store::page_store::header::test::repair_insert_reserve_regression ... [32mok(B[m
+test tree_store::page_store::header::test::truncated_file_is_rejected ... [32mok(B[m
+test tree_store::page_store::header::test::torn_layout_fields_recover_from_file_length ... [32mok(B[m
+test tree_store::btree_base::tests::branch_split_respects_max_keys_by_count ... [32mok(B[m
+test tree_store::page_store::lru_cache::test::reinsert_moves_key_to_the_back ... [32mok(B[m
+test tree_store::page_store::lru_cache::test::replacing_a_value_keeps_its_queue_position ... [32mok(B[m
+test tree_store::page_store::lru_cache::test::second_chance_survives_one_eviction_pass ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::a_hold_does_not_puncture_the_whole_storage_lock ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::a_read_only_handle_takes_shared_holds ... [32mok(B[m
+test tree_store::page_store::lru_cache::test::queue_stays_bounded_with_hot_key ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::shared_holds_admit_each_other ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::syncing_to_a_peers_close_keeps_the_recovery_flag ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::the_header_reaches_the_file_before_write_header_returns ... [32mok(B[m
+test tree_store::page_store::cached_file::test::cache_stats_consistent_during_writes ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_conflicting_lock_reports_the_database_already_open ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_failed_unlock_prevents_whole_storage_fallback ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_lock_that_fails_for_any_other_reason_fails_the_open ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_locked_legacy_reader_byte_masks_the_generation_bytes_from_a_reader ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_partial_conflict_or_io_error_does_not_fall_back ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_platform_without_locks_opens_anyway ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_process_of_another_protocol_generation_refuses_the_open ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::a_shared_mode_without_locks_fails_the_open ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::caller_supplied_lock_results_control_the_open ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::granular_read_only_open_queries_outside_its_locks ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::the_lock_is_released_at_close ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_failure_test::whole_storage_fallback_releases_partial_locks_and_skips_queries ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::a_handle_announces_its_protocol_generation ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::a_read_only_open_refuses_a_cohort_this_build_cannot_form ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::a_refused_open_releases_the_bytes_it_took ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::a_refused_single_process_open_releases_ranges_on_a_retained_file ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::an_exclusive_writer_handle_and_a_multi_process_one_refuse_each_other ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::an_open_refuses_a_process_of_another_protocol_generation ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::exclusive_writer_locks_leave_backend_bytes_and_the_read_only_probe_free ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::opens_beside_a_reader_of_an_older_version ... [32mok(B[m
+test tree_store::page_store::page_manager::lock_protocol_test::the_modes_exclude_each_other ... [32mok(B[m
+test tree_store::page_store::page_manager::test::an_invalidated_allocator_state_is_not_merely_an_unloaded_one ... [32mok(B[m
+test tree_store::btree_mutator::tests::branch_packing_fills_page_to_max_keys ... [32mok(B[m
+test tree_store::page_store::page_manager::test::invalidate_allocator_state_tolerates_poison ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::an_exclusive_hold_excludes_a_shared_one ... [32mok(B[m
+test tree_store::page_store::page_manager::test::mark_page_allocated_rejects_corrupt_page_numbers ... [32mok(B[m
+test tree_store::page_store::page_manager::test::oversized_page_order_is_rejected ... [32mok(B[m
+test tree_store::page_store::page_manager::test::panic ... [32mok(B[m
+test tree_store::page_store::savepoint::test::corrupted_record_errors ... [32mok(B[m
+test tree_store::page_store::xxh3::test::test_empty ... [32mok(B[m
+test tree_store::table_tree::test::round_trip ... [32mok(B[m
+test tuple_types::test::elements_after_the_shortened_one_are_discarded ... [32mok(B[m
+test tuple_types::test::last_element_separator ... [32mok(B[m
+test tuple_types::test::leading_element_separator ... [32mok(B[m
+test tuple_types::test::right_element_is_not_taken_without_a_smaller_tail ... [32mok(B[m
+test tuple_types::test::right_element_separator ... [32mok(B[m
+test tuple_types::test::separator_is_not_grown_by_a_wide_minimum ... [32mok(B[m
+test tuple_types::test::separator_returns_full_key_when_nothing_is_shorter ... [32mok(B[m
+test tuple_types::test::single_element_tuple_forwards_niche ... [32mok(B[m
+test tuple_types::test::single_element_tuple_separator ... [32mok(B[m
+test tuple_types::test::width ... [32mok(B[m
+test types::chrono_v0_4::tests::test_date_time_fixed_offset ... [32mok(B[m
+test types::chrono_v0_4::tests::test_datetime_fixed_offset_table ... [32mok(B[m
+test types::chrono_v0_4::tests::test_fixed_offset ... [32mok(B[m
+test types::chrono_v0_4::tests::test_fixed_offset_table ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_date ... [32mok(B[m
+test db::test::abort_shrinks_multiple_regions ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_date_table ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_date_time ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_time ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_datetime_table ... [32mok(B[m
+test tree_store::page_store::page_manager::test::free_merge_remarks_region_tracker ... [32mok(B[m
+test types::tests::array_separator ... [32mok(B[m
+test types::chrono_v0_4::tests::test_naive_time_table ... [32mok(B[m
+test types::tests::builtin_composites_use_internal3_and_match_legacy ... [32mok(B[m
+test types::tests::byte_slice_separator ... [32mok(B[m
+test types::tests::classification_is_readable_through_reconstruction ... [32mok(B[m
+test types::tests::composite_of_user_type_no_longer_collides_with_builtin ... [32mok(B[m
+test types::tests::default_separator_returns_full_key ... [32mok(B[m
+test types::tests::discarded_array_elements_stay_readable_by_compare ... [32mok(B[m
+test types::tests::fixed_width_array_separator_returns_full_key ... [32mok(B[m
+test types::tests::fixed_width_option_niche ... [32mok(B[m
+test types::tests::fixed_width_option_separator_returns_full_key ... [32mok(B[m
+test types::tests::legacy_matching_accepts_pre_bubbling_spelling ... [32mok(B[m
+test types::tests::min_encoded_keys ... [32mok(B[m
+test types::tests::nonzero_i128_encoding ... [32mok(B[m
+test types::tests::nonzero_i32_encoding ... [32mok(B[m
+test types::tests::nonzero_i16_encoding ... [32mok(B[m
+test types::tests::nonzero_i64_encoding ... [32mok(B[m
+test types::tests::nonzero_i8_encoding ... [32mok(B[m
+test types::tests::nonzero_u128_encoding ... [32mok(B[m
+test types::tests::nonzero_u16_encoding ... [32mok(B[m
+test types::tests::nonzero_u32_encoding ... [32mok(B[m
+test types::tests::nonzero_u64_encoding ... [32mok(B[m
+test types::tests::nonzero_u8_encoding ... [32mok(B[m
+test types::tests::option_bool_encoding ... [32mok(B[m
+test types::tests::option_char_encoding ... [32mok(B[m
+test types::tests::option_of_type_without_niche_keeps_the_tag ... [32mok(B[m
+test types::tests::option_separator ... [32mok(B[m
+test types::tests::round_up_to_char_boundary_matches_std ... [32mok(B[m
+test types::tests::option_str_encoding ... [32mok(B[m
+test types::tests::option_type_name_records_the_niche ... [32mok(B[m
+test types::tests::str_compare_matches_str_ord ... [32mok(B[m
+test types::tests::separator_is_not_grown_by_a_wide_minimum ... [32mok(B[m
+test types::tests::str_separator ... [32mok(B[m
+test types::uuid::tests::test_uuid_ordering ... [32mok(B[m
+test types::tests::variable_width_option_niche ... [32mok(B[m
+test types::uuid::tests::test_uuid_table ... [32mok(B[m
+test tree_store::page_store::lru_cache::test::queue_stays_bounded_without_eviction ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_splits_root_leaf ... [32mok(B[m
+test tree_store::page_store::page_manager::header_lock_test::the_hold_covers_the_write_reaching_the_file ... [32mok(B[m
+test tree_store::btree_mutator::tests::branch_packing_splits_at_max_keys ... [32mok(B[m
+test tree_store::page_store::file_backend::optimized::range_lock_tests::query_mutex_hides_temporary_query_locks ... [32mok(B[m
+test db::test::compact_drops_every_free_trailing_region ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_builds_tree_from_empty ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_descending_from_empty ... [32mok(B[m
+test tree_store::page_store::bitmap::test::random_pattern ... [32mok(B[m
+test tree_store::page_store::page_manager::test::out_of_regions ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_grows_multiple_levels ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_swaps_ancestors_in_place ... [32mok(B[m
+test tree_store::btree_cursor::tests::insert_tests::insert_run_into_middle_of_tall_tree ... [32mok(B[m
+
+test result: [32mok(B[m. 274 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 11.85s
+
+[1m[32m     Running[0m tests/abort_tests.rs (/target/debug/deps/abort_tests-9cf45a8dc3fabf1c)
+
+running 4 tests
+test abort_restores_empty_database_size ... [32mok(B[m
+test abort_reports_truncation_failure ... [32mok(B[m
+test durable_commit_after_abort_discards_aborted_writes ... [32mok(B[m
+test abort_restores_file_size ... [32mok(B[m
+
+test result: [32mok(B[m. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.73s
+
+[1m[32m     Running[0m tests/backward_compatibility.rs (/target/debug/deps/backward_compatibility-10a64d744b25cbe7)
+
+running 8 tests
+test builtin_composite_does_not_alias_user_type ... [32mok(B[m
+test composite_of_user_type_does_not_alias_builtin ... [32mok(B[m
+test legacy_colliding_user_composite_can_still_open_as_builtin ... [32mok(B[m
+test composite_of_user_type_created_by_redb2_6_still_opens ... [32mok(B[m
+test restore_and_delete_redb2_6_persistent_savepoint ... [32mok(B[m
+test mixed_width ... [32mok(B[m
+test container_types ... [32mok(B[m
+test primitive_types ... [32mok(B[m
+
+test result: [32mok(B[m. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.54s
+
+[1m[32m     Running[0m tests/basic_tests.rs (/target/debug/deps/basic_tests-089b67bcf3cd0740)
+
+running 130 tests
+test array_type ... [32mok(B[m
+test char_type ... [32mok(B[m
+test abort ... [32mok(B[m
+test bool_type ... [32mok(B[m
+test delete_table ... [32mok(B[m
+test delete_open_table ... [32mok(B[m
+test custom_ordering ... [32mok(B[m
+test delete ... [32mok(B[m
+test create_does_not_repair ... [32mok(B[m
+test create_open ... [32mok(B[m
+test entry_borrowed_key_in_loop ... [32mok(B[m
+test deferred_close_invalidates_read_transactions ... [32mok(B[m
+test entry_borrowed_key ... [32mok(B[m
+test empty_type ... [32mok(B[m
+test entry_or_insert ... [32mok(B[m
+test entry_and_modify ... [32mok(B[m
+test entry_vacant_into_key ... [32mok(B[m
+test entry_or_insert_with ... [32mok(B[m
+test drop_database_then_drop_write_transaction ... [32mok(B[m
+test entry_occupied_methods ... [32mok(B[m
+test extract_if ... [32mok(B[m
+test extract_if_is_lazy_until_read ... [32mok(B[m
+test extract_if_mixed_direction_removes_only_yielded_entries ... [32mok(B[m
+test extract_from_if_empty ... [32mok(B[m
+test extract_from_if_mixed_direction_early_drop_range ... [32mok(B[m
+test extract_if_returned_guards_survive_finalize ... [32mok(B[m
+test extract_if_alternating_directions_dense_removals ... [32mok(B[m
+test extract_if_alternating_directions_partial_consumption ... [32mok(B[m
+test extract_if_alternating_directions_held_guards ... [32mok(B[m
+test f32_type ... [32mok(B[m
+test first_last ... [32mok(B[m
+test generic_array_type ... [32mok(B[m
+test generic_signature_lifetimes ... [32mok(B[m
+test i128_type ... [32mok(B[m
+test extract_if_caller_panic_does_not_poison_transaction ... [32mok(B[m
+test extract_if_predicate_panic_poisons_transaction ... [32mok(B[m
+test get_mut ... [32mok(B[m
+test insert_overwrite ... [32mok(B[m
+test insert_reserve ... [32mok(B[m
+test is_empty ... [32mok(B[m
+test iter ... [32mok(B[m
+test len ... [32mok(B[m
+test list_tables ... [32mok(B[m
+test multiple_tables ... [32mok(B[m
+test no_dirty_reads ... [32mok(B[m
+test nonzero_type ... [32mok(B[m
+test in_memory ... [32mok(B[m
+test nonzero_type_does_not_alias_its_primitive ... [32mok(B[m
+test open_multimap_table_as_regular ... [32mok(B[m
+test option_nonzero_type ... [32mok(B[m
+test option_type ... [32mok(B[m
+test owned_get_signatures ... [32mok(B[m
+test extract_if_mostly_forward_occasional_next_back ... [32mok(B[m
+test pop ... [32mok(B[m
+test range_arc ... [32mok(B[m
+test range_clone ... [32mok(B[m
+test range_empty ... [32mok(B[m
+test range_lifetime ... [32mok(B[m
+test range_signature_inference ... [32mok(B[m
+test read_isolation ... [32mok(B[m
+test option_nonzero_table_reopens ... [32mok(B[m
+test read_isolation2 ... [32mok(B[m
+test read_only ... [32mok(B[m
+test read_only_file_keeps_opened_file_after_path_replacement ... [32mok(B[m
+test read_only_file_refuses_recovery_without_modifying_bytes ... [32mok(B[m
+test read_only_backend_preserves_bytes ... [32mok(B[m
+test ref_get_signatures ... [32mok(B[m
+test rename_open_table ... [32mok(B[m
+test rename_table ... [32mok(B[m
+test rename_table_to_same_name ... [32mok(B[m
+test reopen_table ... [32mok(B[m
+test retain ... [32mok(B[m
+test extract_if_all_guards_survive_iteration ... [32mok(B[m
+test array_keys_with_shortened_separators ... [32mok(B[m
+test option_keys_with_shortened_separators ... [32mok(B[m
+test retain_in_empty ... [32mok(B[m
+test extract_from_if_alternating_drain ... [32mok(B[m
+test extract_from_if_alternating_directions ... [32mok(B[m
+test extract_from_if_next_back_large_range ... [32mok(B[m
+test retain_merges_sparse_boundary_leaf ... [32mok(B[m
+test multi_table_commit_writes_are_deterministic ... [32mok(B[m
+test retain_predicate_panic_poisons_transaction ... [32mok(B[m
+test option_separators_shrink_branch_nodes ... [32mok(B[m
+test fixed_width_leading_element_separators_shrink_branch_nodes ... [32mok(B[m
+test return_write_transaction_from_function ... [32mok(B[m
+test array_separators_shrink_branch_nodes ... [32mok(B[m
+test separators_are_encodings ... [32mok(B[m
+test signature_lifetimes ... [32mok(B[m
+test stored_size ... [32mok(B[m
+test ascending_inserts_pack_leaves ... [32mok(B[m
+test str_type ... [32mok(B[m
+test string_type ... [32mok(B[m
+test table_stats ... [32mok(B[m
+test tuple10_type ... [32mok(B[m
+test retain_descending_removals_stay_merged ... [32mok(B[m
+test tuple11_type ... [32mok(B[m
+test tuple12_type ... [32mok(B[m
+test tuple2_type ... [32mok(B[m
+test tuple3_type ... [32mok(B[m
+test tuple4_type ... [32mok(B[m
+test tuple5_type ... [32mok(B[m
+test tuple6_type ... [32mok(B[m
+test tuple7_type ... [32mok(B[m
+test ascending_inserts_pack_leaves_across_transactions ... [32mok(B[m
+test tuple8_type ... [32mok(B[m
+test tuple9_type ... [32mok(B[m
+test tuple_type_function_lifetime ... [32mok(B[m
+test tuple_type_lifetime ... [32mok(B[m
+test u64_type ... [32mok(B[m
+test u8_array_serialization ... [32mok(B[m
+test vec_fixed_width_value_type ... [32mok(B[m
+test vec_long_string_element ... [32mok(B[m
+test same_size_overwrite_preserves_snapshot ... [32mok(B[m
+test vec_var_width_value_type ... [32mok(B[m
+test vec_vec_type ... [32mok(B[m
+test write_transaction_keeps_database_open ... [32mok(B[m
+test retain_collapses_to_single_entry ... [32mok(B[m
+test retain_large_values_bounded_run ... [32mok(B[m
+test tuple_keys_with_shortened_separators ... [32mok(B[m
+test concurrent_write_transactions_block ... [32mok(B[m
+test tuple_separators_shrink_branch_nodes ... [32mok(B[m
+test str_keys_with_multibyte_characters ... [32mok(B[m
+test packed_leaves_accept_interior_inserts ... [32mok(B[m
+test retain_variable_sized_sparse_survivors_terminates ... [32mok(B[m
+test retain_collapses_to_sparse_entries ... [32mok(B[m
+test retain_coalesces_sparse_survivors ... [32mok(B[m
+test retain_in_upper_boundary_does_not_duplicate_subtrees ... [32mok(B[m
+test retain_in_rebuilds_range_boundaries ... [32mok(B[m
+test retain_packs_moderate_density_survivors ... [32mok(B[m
+test retain_rebuilds_changed_separators ... [32mok(B[m
+
+test result: [32mok(B[m. 130 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.01s
+
+[1m[32m     Running[0m tests/borrow_markers.rs (/target/debug/deps/borrow_markers-c0dc186e91415ce9)
+
+running 1 test
+test lifetime_markers_are_scoped_borrows ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+[1m[32m     Running[0m tests/check_integrity_failure.rs (/target/debug/deps/check_integrity_failure-6155dd3b540b4645)
+
+running 1 test
+test writes_are_refused_after_a_failed_check_integrity ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+[1m[32m     Running[0m tests/check_integrity_nondurable.rs (/target/debug/deps/check_integrity_nondurable-5d44520f62438d3f)
+
+running 5 tests
+test check_integrity_preserves_nondurable_commit_that_creates_a_table ... [32mok(B[m
+test check_integrity_does_not_promote_disk_corrupt_nondurable_commit ... [32mok(B[m
+test check_integrity_handles_external_extension_with_pending_commit ... [32mok(B[m
+test check_integrity_detects_truncation_after_nondurable_growth ... [32mok(B[m
+test check_integrity_preserves_growing_nondurable_commit ... [32mok(B[m
+
+test result: [32mok(B[m. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+[1m[32m     Running[0m tests/corrupted_btree_descent.rs (/target/debug/deps/corrupted_btree_descent-b44ca1936ebb9ea2)
+
+running 3 tests
+test iteration_does_not_resume_past_corruption ... [32mok(B[m
+test cyclic_branch_pointer_is_reported_rather_than_overflowing_the_stack ... [32mok(B[m
+test iteration_from_both_ends_latches_after_error ... [32mok(B[m
+
+test result: [32mok(B[m. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+[1m[32m     Running[0m tests/corruption_repair.rs (/target/debug/deps/corruption_repair-a77828b8bcd66c87)
+
+running 5 tests
+test check_integrity_on_open_survives_truncation ... [32mok(B[m
+test check_integrity_on_open_opens_an_intact_database ... [32mok(B[m
+test check_integrity_on_open_survives_zeroed_and_swapped_pages ... [32mok(B[m
+test check_integrity_on_open_survives_a_corrupted_header ... [32mok(B[m
+test check_integrity_on_open_survives_a_flipped_bit_in_every_page ... [32mok(B[m
+
+test result: [32mok(B[m. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.29s
+
+[1m[32m     Running[0m tests/crash_consistency.rs (/target/debug/deps/crash_consistency-637d442193d0b231)
+
+running 1 test
+test crash_during_growing_commit_is_recoverable ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.19s
+
+[1m[32m     Running[0m tests/cursor_tests.rs (/target/debug/deps/cursor_tests-3d7bb517593653db)
+
+running 37 tests
+test bound_positions ... [32mok(B[m
+test empty_and_rejected_only_cursors ... [32mok(B[m
+test insert_after_unordered_keys_rejected ... [32mok(B[m
+test moves_apply_pending_inserts ... [32mok(B[m
+test mixed_direction_inserts_and_peeks ... [32mok(B[m
+test abort_discards_cursor_inserts ... [32mok(B[m
+test moves_walk_both_directions ... [32mok(B[m
+test moves_on_empty_table_and_at_edges ... [32mok(B[m
+test peeks_during_pending_inserts ... [32mok(B[m
+test peeks_on_empty_table_and_at_start ... [32mok(B[m
+test read_cursor_all_bound_positions ... [32mok(B[m
+test read_cursor_empty_table ... [32mok(B[m
+test read_cursor_generic_over_readable_table ... [32mok(B[m
+test read_cursor_guards_outlive_cursor ... [32mok(B[m
+test read_cursor_outlives_read_transaction ... [32mok(B[m
+test removes_apply_pending_inserts ... [32mok(B[m
+test read_cursor_string_keys ... [32mok(B[m
+test read_cursor_sees_uncommitted_writes ... [32mok(B[m
+test removes_keep_the_gap_in_place ... [32mok(B[m
+test removes_on_empty_table_and_at_edges ... [32mok(B[m
+test removes_walk_both_directions ... [32mok(B[m
+test insert_into_middle_gap ... [32mok(B[m
+test bulk_load_large_values ... [32mok(B[m
+test unordered_keys_rejected ... [32mok(B[m
+test read_cursor_walks_both_directions ... [32mok(B[m
+test removes_large_values ... [32mok(B[m
+test append_to_existing_table ... [32mok(B[m
+test moves_cross_leaf_boundaries ... [32mok(B[m
+test incremental_appends_across_transactions ... [32mok(B[m
+test removes_from_committed_pages ... [32mok(B[m
+test bulk_load_crosses_flush_threshold ... [32mok(B[m
+test descending_load_crosses_flush_threshold ... [32mok(B[m
+test removes_cross_leaf_boundaries ... [32mok(B[m
+test read_cursor_keeps_transaction_alive ... [32mok(B[m
+test bulk_load_descending ... [32mok(B[m
+test bulk_load_into_empty_table ... [32mok(B[m
+test insert_into_middle_of_tall_tree ... [32mok(B[m
+
+test result: [32mok(B[m. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.21s
+
+[1m[32m     Running[0m tests/integration_tests.rs (/target/debug/deps/integration_tests-7cd10b6d84eef623)
+
+running 116 tests
+test close_called_exactly_once_when_open_fails ... [32mok(B[m
+test alias_table ... [32mok(B[m
+test check_integrity_with_live_read_transaction ... [32mok(B[m
+test compact_does_not_block_on_held_write_transaction ... [32mok(B[m
+test compact_returns_ephemeral_savepoint_error ... [32mok(B[m
+test compact_returns_persistent_savepoint_error ... [32mok(B[m
+test compact_after_non_durable_commit ... [32mok(B[m
+test compact_does_not_block_on_held_write_transaction_with_savepoint ... [32mok(B[m
+test check_integrity_preserves_non_durable_commit ... [32mok(B[m
+test compact_returns_persistent_savepoint_error_after_reopen ... [32mok(B[m
+test check_integrity_clean ... [32mok(B[m
+test custom_table_type ... [32mok(B[m
+test check_integrity_after_persistent_savepoint_restore_and_delete ... [32mok(B[m
+test delete_all_tables ... [32mok(B[m
+test does_not_exist ... [32mok(B[m
+test delete_table ... [32mok(B[m
+test database_lock ... [32mok(B[m
+test dropped_write ... [32mok(B[m
+test compact_returns_persistent_savepoint_error_before_commit ... [32mok(B[m
+test delete_table_panic_after_modification ... [32mok(B[m
+test compact_returns_transaction_in_progress_error ... [32mok(B[m
+test explicit_close ... [32mok(B[m
+test extract_if_next_then_next_back_panic ... [32mok(B[m
+test failed_reopen_preserves_staged_table ... [32mok(B[m
+test extract_if_error_commit_reports_storage_failure ... [32mok(B[m
+test file_backend_custom_open_releases_locks_with_a_retained_file_clone ... [32mok(B[m
+test check_integrity_clean_after_delete ... [32mok(B[m
+test file_backend_invalid_lock_bounds_leave_existing_locks_held ... [32mok(B[m
+test file_backend_lock_bounds_preserve_endpoints ... [32mok(B[m
+test file_backend_custom_open_respects_file_locks ... [32mok(B[m
+test invalid_database_file ... [32mok(B[m
+test durable_overwrite_does_not_write_post_commit_metadata ... [32mok(B[m
+test is_send ... [32mok(B[m
+test immediate_persistence ... [32mok(B[m
+test check_integrity_ephemeral_savepoint_drop_racing_commit ... [32mok(B[m
+test mixed_durable_commit ... [32mok(B[m
+test check_integrity_with_persistent_savepoint_then_restore ... [32mok(B[m
+test check_integrity_after_persistent_savepoint_delete ... [32mok(B[m
+test multi_page_kv ... [32mok(B[m
+test multimap_value_next_back_does_not_update_len ... [32mok(B[m
+test multiple_persistent_savepoints_in_one_transaction ... [32mok(B[m
+test check_integrity_with_live_savepoint_on_nondurable_commit ... [32mok(B[m
+test no_downgrade_durability_with_savepoint ... [32mok(B[m
+test large_keys ... [32mok(B[m
+test multimap_table_definition_new_panics_on_empty_name - should panic ... [32mok(B[m
+test no_savepoint_resurrection ... [32mok(B[m
+test non_page_size_multiple ... [32mok(B[m
+test non_durable_read_isolation ... [32mok(B[m
+test non_durable_commit_persistence ... [32mok(B[m
+test non_durable_commit_issues_no_backend_writes ... [32mok(B[m
+test nondurable_live_and_free ... [32mok(B[m
+test page_reuse ... [32mok(B[m
+test corrupted_persistent_savepoint_record ... [32mok(B[m
+test persistent_savepoint ... [32mok(B[m
+test close_called_exactly_once_on_shutdown_io_error ... [32mok(B[m
+test previous_io_error ... [32mok(B[m
+test compact_after_post_commit_page_reuse ... [32mok(B[m
+test extract_if_error_latches ... [32mok(B[m
+test page_reuse_with_racing_reader ... [32mok(B[m
+test persistent_savepoint_abort_unbounded_leak ... [32mok(B[m
+test range_query_reversed ... [32mok(B[m
+test range_query ... [32mok(B[m
+test read_past_eof_errors ... [32mok(B[m
+test regression ... [32mok(B[m
+test regression10 ... [32mok(B[m
+test page_reuse_after_unclean_reopen ... [32mok(B[m
+test read_only_get_guard_keeps_transaction_alive ... [32mok(B[m
+test regression12 ... [32mok(B[m
+test regression13 ... [32mok(B[m
+test regression14 ... [32mok(B[m
+test regression17 ... [32mok(B[m
+test read_only_range_guards_keep_transaction_alive ... [32mok(B[m
+test regression11 ... [32mok(B[m
+test regression2 ... [32mok(B[m
+test regression18 ... [32mok(B[m
+test regression19 ... [32mok(B[m
+test regression21 ... [32mok(B[m
+test regression22 ... [32mok(B[m
+test regression24 ... [32mok(B[m
+test regression26 ... [32mok(B[m
+test regression23 ... [32mok(B[m
+test regression27 ... [32mok(B[m
+test regression3 ... [32mok(B[m
+test regression7 ... [32mok(B[m
+test regression8 ... [32mok(B[m
+test regression9 ... [32mok(B[m
+test restore_savepoint_abort_after_ephemeral_drop ... [32mok(B[m
+test rename_table_with_modifications_data_loss ... [32mok(B[m
+test restore_savepoint_from_foreign_database_panics ... [32mok(B[m
+test restore_savepoint_partial_revert_commits_as_data_loss ... [32mok(B[m
+test range_mixed_direction_no_duplicates_multi_page ... [32mok(B[m
+test savepoint ... [32mok(B[m
+test savepoint_restore_data_loss_pending_table_updates ... [32mok(B[m
+test dynamic_growth ... [32mok(B[m
+test small_db_is_small_file ... [32mok(B[m
+test savepoint_restore_data_loss_stale_freed_pages ... [32mok(B[m
+test table_definition_new_panics_on_empty_name - should panic ... [32mok(B[m
+test page_reuse_after_persistent_savepoint_delete ... [32mok(B[m
+test untyped_tables_keep_read_transaction_alive ... [32mok(B[m
+test tree_balance ... [32mok(B[m
+test value_too_large ... [32mok(B[m
+test wrong_types ... [32mok(B[m
+test regression20 ... [32mok(B[m
+test range_alternating_direction_meets_at_leaf_boundary ... [32mok(B[m
+test nondurable_free ... [32mok(B[m
+test immediate_free ... [32mok(B[m
+test restore_savepoint_abort_unbounded_leak ... [32mok(B[m
+test large_values ... [32mok(B[m
+test compaction ... [32mok(B[m
+test multimap_stats ... [32mok(B[m
+test stats_with_open_table ... [32mok(B[m
+test stats_with_renamed_open_table ... [32mok(B[m
+test ephemeral_savepoint_racing_first_open_no_leak ... [32mok(B[m
+test compact_does_not_grow_file ... [32mok(B[m
+test many_pairs ... [32mok(B[m
+test regression25 ... [32mok(B[m
+
+test result: [32mok(B[m. 116 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.23s
+
+[1m[32m     Running[0m tests/multimap_tests.rs (/target/debug/deps/multimap_tests-b0fa5c97a915d348)
+
+running 20 tests
+test len ... [32mok(B[m
+test is_empty ... [32mok(B[m
+test insert ... [32mok(B[m
+test get_arc_lifetime ... [32mok(B[m
+test multimap_signature_lifetimes ... [32mok(B[m
+test range_arc_lifetime ... [32mok(B[m
+test range_lifetime ... [32mok(B[m
+test range_query ... [32mok(B[m
+test iter ... [32mok(B[m
+test multimap_remove_collapses_committed_subtree_to_inline ... [32mok(B[m
+test delete ... [32mok(B[m
+test wrong_types ... [32mok(B[m
+test reopen_table ... [32mok(B[m
+test multimap_remove_nonexistent_value_from_subtree_does_not_churn ... [32mok(B[m
+test multimap_value_next_back_subtree ... [32mok(B[m
+test remove_all_uncommitted_subtree_collect ... [32mok(B[m
+test multimap_remove_subtree_backed_key ... [32mok(B[m
+test efficient_storage ... [32mok(B[m
+test read_only_get_value_guards_keep_transaction_alive ... [32mok(B[m
+test read_only_range_entries_keep_transaction_alive ... [32mok(B[m
+
+test result: [32mok(B[m. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.75s
+
+[1m[32m     Running[0m tests/multiprocess_tests.rs (/target/debug/deps/multiprocess_tests-3339729a34b33525)
+
+running 27 tests
+test a_corrupt_primary_is_not_repaired_from_under_a_peers_read ... [32mok(B[m
+test peer_commits::a_close_writes_no_header_over_a_commit_it_could_not_sync_to ... [32mok(B[m
+test peer_commits::a_read_transaction_on_a_writable_handle_sees_a_peers_commit ... [32mok(B[m
+test peer_commits::a_close_records_a_peers_commit ... [32mok(B[m
+test an_integrity_check_syncs_to_a_peers_commits ... [32mok(B[m
+test compaction::compaction_refuses_a_peers_read_transaction ... [32mok(B[m
+test peer_commits::a_close_does_not_wait_for_a_peers_write_transaction ... [32mok(B[m
+test peer_commits::a_write_transaction_syncs_to_a_peers_commit ... [32mok(B[m
+test shared_reader::a_shared_reader_ignores_the_layout ... [32mok(B[m
+test peer_commits::a_write_transaction_syncs_to_a_peers_savepoint ... [32mok(B[m
+test shared_reader::a_repairing_writer_does_not_admit_a_shared_reader ... [32mok(B[m
+test the_concurrency_mode_excludes_incompatible_opens ... [32mok(B[m
+test file_backend_custom_open_supports_shared_modes ... [32mok(B[m
+test peer_commits::a_write_transaction_reads_a_peers_page_over_a_page_a_panic_left_buffered ... [32mok(B[m
+test writer_byte::an_exclusive_writer_transaction_does_not_puncture_the_whole_file_lock ... [32mok(B[m
+test sharing_a_backend_without_locks_is_unsupported ... [32mok(B[m
+test writer_byte::an_aborted_transaction_releases_the_byte ... [32mok(B[m
+test peer_commits::a_dropped_transactions_savepoint_is_not_revived_by_a_peer ... [32mok(B[m
+test peer_commits::check_integrity_reports_a_corrupted_file_after_a_peers_commit ... [32mok(B[m
+test peer_commits::an_aborted_savepoint_is_not_revived_by_a_peer ... [32mok(B[m
+test peer_commits::a_panicked_transactions_savepoint_is_not_revived_by_a_peer ... [32mok(B[m
+test compaction::untyped_tables_pin_a_peers_snapshot_until_dropped ... [32mok(B[m
+test reclamation::a_readers_pin_survives_heavy_reclamation ... [32mok(B[m
+test an_integrity_check_waits_for_a_peers_write_transaction ... [32mok(B[m
+test shared_reader::a_shared_reader_sees_a_peers_writes ... [32mok(B[m
+test writer_byte::a_write_transaction_excludes_another_process ... [32mok(B[m
+test compaction::compaction_shrinks_a_file_a_peer_has_open ... [32mok(B[m
+
+test result: [32mok(B[m. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s
+
+[1m[32m     Running[0m tests/multithreading_tests.rs (/target/debug/deps/multithreading_tests-402bb5fb1913a2e9)
+
+running 4 tests
+test multithreading_test::len ... [32mok(B[m
+test multithreading_test::multithreaded_insert ... [32mok(B[m
+test multithreading_test::multithreaded_re_read ... [32mok(B[m
+test multithreading_test::multithreaded_insert_and_remove ... [32mok(B[m
+
+test result: [32mok(B[m. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+[1m[32m     Running[0m tests/niche_tests.rs (/target/debug/deps/niche_tests-c36807240d6a6c8d)
+
+running 1 test
+test tables_written_without_the_niche_open_through_the_legacy_type ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.63s
+
+[1m[32m     Running[0m tests/savepoint_integrity.rs (/target/debug/deps/savepoint_integrity-ef6934c5ac956f9a)
+
+running 1 test
+test check_integrity_verifies_the_trees_of_persistent_savepoints ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+[1m[32m     Running[0m unittests src/lib.rs (/target/debug/deps/redb_derive-edb940fc6e8fd9e0)
+
+running 0 tests
+
+test result: [32mok(B[m. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests/crate_attr_tests.rs (/target/debug/deps/crate_attr_tests-930b0ccb7425e32d)
+
+running 1 test
+test derives_for_both_redb_versions ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+[1m[32m     Running[0m tests/derive_tests.rs (/target/debug/deps/derive_tests-b365b9a1e1561a0b)
+
+running 20 tests
+test test_compare_uses_trait_from_bytes ... [32mok(B[m
+test test_field_with_conflicting_inherent_signatures ... [32mok(B[m
+test test_key_ordering ... [32mok(B[m
+test test_nested_user_types_are_marked ... [32mok(B[m
+test test_user_defined_field_type_name_does_not_collide ... [32mok(B[m
+test test_colliding_types_do_not_open_each_others_tables ... [32mok(B[m
+test test_inherent_methods_do_not_shadow_trait_methods ... [32mok(B[m
+test test_unit_struct ... [32mok(B[m
+test test_uuid_field ... [32mok(B[m
+test test_single_field_forwards_niche ... [32mok(B[m
+test lifetime_names ... [32mok(B[m
+test test_complex_struct ... [32mok(B[m
+test test_simple_struct ... [32mok(B[m
+test test_single_field ... [32mok(B[m
+test test_no_prelude_at_derive_site ... [32mok(B[m
+test test_shadowed_names_at_derive_site ... [32mok(B[m
+test test_tuple_struct1 ... [32mok(B[m
+test test_tuple_struct2 ... [32mok(B[m
+test test_tuple_struct0 ... [32mok(B[m
+test test_zero_fields ... [32mok(B[m
+
+test result: [32mok(B[m. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+[1m[32m     Running[0m unittests src/lib.rs (/target/debug/deps/redb_derive_rename_test-852e92c236006c23)
+
+running 0 tests
+
+test result: [32mok(B[m. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m tests/rename_test.rs (/target/debug/deps/rename_test-390c801613f95da8)
+
+running 1 test
+test derive_with_renamed_redb_dependency ... [32mok(B[m
+
+test result: [32mok(B[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m     Running[0m unittests src/lib.rs (/target/debug/deps/redb-2ad1d3197454212f)
+
+running 0 tests
+
+test result: [32mok(B[m. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m   Doc-tests[0m redb
+
+running 6 tests
+test src/db.rs - db::Database (line 752) ... [32mok(B[m
+test src/lib.rs - (line 36) ... [32mok(B[m
+test src/table.rs - table::ReadableTable::range (line 627) ... [32mok(B[m
+test src/db.rs - db::ReadOnlyDatabase (line 620) ... [32mok(B[m
+test src/legacy_types.rs - legacy_types::Legacy (line 18) ... [32mok(B[m
+test src/table.rs - table::Table<'txn,K,V>::upper_bound_mut (line 391) ... [32mok(B[m
+
+test result: [32mok(B[m. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 3 tests
+test src/multimap_table.rs - multimap_table::multimap_range_keeps_the_table_borrowed (line 364) - compile fail ... [32mok(B[m
+test src/table.rs - table::range_keeps_the_table_borrowed (line 1151) - compile fail ... [32mok(B[m
+test src/table.rs - table::cursor_keeps_the_table_borrowed (line 1523) - compile fail ... [32mok(B[m
+
+test result: [32mok(B[m. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+all doctests ran in 1.21s; merged doctests compilation took 1.15s
+[1m[32m   Doc-tests[0m redb_derive
+
+running 0 tests
+
+test result: [32mok(B[m. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[1m[32m   Doc-tests[0m redb_derive_rename_test
+
+running 0 tests
+
+test result: [32mok(B[m. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

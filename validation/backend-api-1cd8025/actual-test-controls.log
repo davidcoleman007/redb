@@ -1,0 +1,9 @@
+Container=b9d954f4a06a81f8a82ae3ef9ee5d419c4acbc5e55675846634092fabacf9604 Image=95f85985b45aa38b80c8e95624cf88af65edefcb0816f63d5fdf92d0358b3117 Memory=8589934592 PidsLimit=2048 ReadonlyRootfs=true NetworkMode=none CapDrop=[CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_FSETID CAP_KILL CAP_NET_BIND_SERVICE CAP_SETFCAP CAP_SETGID CAP_SETPCAP CAP_SETUID CAP_SYS_CHROOT] SecurityOpt=[no-new-privileges] User=1000:1000
+memory.max=8589934592
+pids.max=2048
+CapEff:	0000000000000000
+NoNewPrivs:	1
+Seccomp:	2
+root_mount=ro,relatime
+network_interfaces=lo
+uid=1000(redb-backend-validator) gid=1000(redb-backend-validator) groups=1000(redb-backend-validator)

@@ -1,0 +1,257 @@
+{
+  "totals": {
+    "passed": 669,
+    "failed": 0,
+    "ignored": 0,
+    "measured": 0,
+    "filtered_out": 0
+  },
+  "unit_integration_passed": 660,
+  "doctests_passed": 9,
+  "suites": [
+    {
+      "suite": "Running unittests src/lib.rs (/target/debug/deps/redb-e4e9768885aea62e)",
+      "result": "ok",
+      "passed": 274,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/abort_tests.rs (/target/debug/deps/abort_tests-9cf45a8dc3fabf1c)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/backward_compatibility.rs (/target/debug/deps/backward_compatibility-10a64d744b25cbe7)",
+      "result": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/basic_tests.rs (/target/debug/deps/basic_tests-089b67bcf3cd0740)",
+      "result": "ok",
+      "passed": 130,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/borrow_markers.rs (/target/debug/deps/borrow_markers-c0dc186e91415ce9)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/check_integrity_failure.rs (/target/debug/deps/check_integrity_failure-6155dd3b540b4645)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/check_integrity_nondurable.rs (/target/debug/deps/check_integrity_nondurable-5d44520f62438d3f)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/corrupted_btree_descent.rs (/target/debug/deps/corrupted_btree_descent-b44ca1936ebb9ea2)",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/corruption_repair.rs (/target/debug/deps/corruption_repair-a77828b8bcd66c87)",
+      "result": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/crash_consistency.rs (/target/debug/deps/crash_consistency-637d442193d0b231)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/cursor_tests.rs (/target/debug/deps/cursor_tests-3d7bb517593653db)",
+      "result": "ok",
+      "passed": 37,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/integration_tests.rs (/target/debug/deps/integration_tests-7cd10b6d84eef623)",
+      "result": "ok",
+      "passed": 116,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/multimap_tests.rs (/target/debug/deps/multimap_tests-b0fa5c97a915d348)",
+      "result": "ok",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/multiprocess_tests.rs (/target/debug/deps/multiprocess_tests-3339729a34b33525)",
+      "result": "ok",
+      "passed": 27,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/multithreading_tests.rs (/target/debug/deps/multithreading_tests-402bb5fb1913a2e9)",
+      "result": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/niche_tests.rs (/target/debug/deps/niche_tests-c36807240d6a6c8d)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/savepoint_integrity.rs (/target/debug/deps/savepoint_integrity-ef6934c5ac956f9a)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/target/debug/deps/redb_derive-edb940fc6e8fd9e0)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/crate_attr_tests.rs (/target/debug/deps/crate_attr_tests-930b0ccb7425e32d)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/derive_tests.rs (/target/debug/deps/derive_tests-b365b9a1e1561a0b)",
+      "result": "ok",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/target/debug/deps/redb_derive_rename_test-852e92c236006c23)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running tests/rename_test.rs (/target/debug/deps/rename_test-390c801613f95da8)",
+      "result": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Running unittests src/lib.rs (/target/debug/deps/redb-2ad1d3197454212f)",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests redb",
+      "result": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests redb",
+      "result": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests redb_derive",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    {
+      "suite": "Doc-tests redb_derive_rename_test",
+      "result": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0
+    }
+  ],
+  "derivation": "ANSI/terminal charset escapes removed only for parsing; original log unchanged"
+}
