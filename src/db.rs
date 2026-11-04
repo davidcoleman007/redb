@@ -2306,7 +2306,16 @@ impl Builder {
         path: impl AsRef<Path>,
     ) -> Result<ReadOnlyDatabase, DatabaseError> {
         let file = OpenOptions::new().read(true).open(path)?;
+        self.open_read_only_file(file)
+    }
 
+    /// Opens an existing redb database from the given readable `file`, without modifying it.
+    ///
+    /// The file is used directly, without reopening its pathname. A database requiring recovery
+    /// is rejected rather than repaired. The locking and concurrency rules of
+    /// [`Self::open_read_only`] also apply to this method.
+    #[cfg(not(redb_no_std))]
+    pub fn open_read_only_file(&self, file: File) -> Result<ReadOnlyDatabase, DatabaseError> {
         ReadOnlyDatabase::new(
             Box::new(FileBackend::new(file)?),
             self.page_size,
